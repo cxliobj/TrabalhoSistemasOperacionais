@@ -4,7 +4,7 @@ Matrix* newMatrix(int dimension, FILE* argv_file_matrix)
 {
     Matrix* matrix = (Matrix*) malloc(sizeof(Matrix));
     matrix->fileArray = argv_file_matrix;
-    matrix->array = (int*) malloc (dimension * dimension * sizeof(int));
+    matrix->array = (int*) calloc (dimension * dimension, sizeof(int));
     matrix->dimension = dimension;
     matrix->reduction = 0;
     return matrix;
