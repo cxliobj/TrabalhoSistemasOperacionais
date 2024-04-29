@@ -1,8 +1,10 @@
 /*
- * Compilation: gcc -o -pthread exec matrix.c main.c
- * Executation: ./main numThreads numDimension matrixA.txt matrixB.txt matrixC.txt matrixD.txt matrixE.txt
- *              ./main numThreads numDimension matrixA100.txt matrixB100.txt matrixC100.txt matrixD100.txt matrixE100.txt
- *              ./main numThreads numDimension matrixA1k.txt matrixB1k.txt matrixC1k.txt matrixD1k.txt matrixE1k.txt       
+ * Ideal Compilation: gcc -o -pthread exec matrix.c string.c main.c
+ * Compilation now: gcc -o exec matrix.c string.c main.c
+ * Executation: ./exec numThreads numDimension matrixA.txt matrixB.txt matrixC.txt matrixD.txt matrixE.txt
+ *              ./exec numThreads numDimension matrixA100.txt matrixB100.txt matrixC100.txt matrixD100.txt matrixE100.txt
+ *              ./exec numThreads numDimension matrixA1k.txt matrixB1k.txt matrixC1k.txt matrixD1k.txt matrixE1k.txt
+ *              ./exec numThreads numDimension matrixA2k.txt matrixB2k.txt matrixC2k.txt matrixD2k.txt matrixE2k.txt
 */
 
 #include <stdio.h>
@@ -55,9 +57,9 @@ int main(int argc, char* argv[]) {
     // PASSO 1 (2 threads Tl)
 
     transcribeMatrix(matrix_A);
-    fclose(matrix_A->fileArray);
-
     transcribeMatrix(matrix_B);
+
+    fclose(matrix_A->fileArray);
     fclose(matrix_B->fileArray);
 
     // PASSO 2 (T threads Tp)
@@ -69,10 +71,12 @@ int main(int argc, char* argv[]) {
     free(matrix_A);
     free(matrix_B);
 
-    // PASSO 3 + PASSO 4 (1 thread Te e 1 thread Tl)
+    // PASSO 3 (1 thread Te)
 
     writeMatrix(matrix_D);
     fclose(matrix_D->fileArray);
+
+    // PASSO 4 (1 thread Tl)
 
     transcribeMatrix(matrix_C);
     fclose(matrix_C->fileArray);
@@ -86,10 +90,12 @@ int main(int argc, char* argv[]) {
     free(matrix_C);
     free(matrix_D);
 
-    // PASSO 6 + PASSO 7 (1 thread Te e 1 thread Tp)
+    // PASSO 6 (1 thread Te)
 
     writeMatrix(matrix_E);
     fclose(matrix_E->fileArray);
+
+    // PASSO 7 (1 thread Tp)
 
     start_reduction = clock();
     reduceMatrix(matrix_E);
@@ -99,10 +105,10 @@ int main(int argc, char* argv[]) {
 
 /* FINAL **************************************************************************************************************************** */
 
-    double total_time_sum = ((double) end_sum)/CLOCKS_PER_SEC;
-    double total_time_multiplication = ((double) end_multiplication)/CLOCKS_PER_SEC;
-    double total_time_reduction = ((double) end_reduction)/CLOCKS_PER_SEC;
-    double total_time_global = ((double) end_global)/CLOCKS_PER_SEC;
+    double total_time_sum = ((double) end_sum) / CLOCKS_PER_SEC;
+    double total_time_multiplication = ((double) end_multiplication) / CLOCKS_PER_SEC;
+    double total_time_reduction = ((double) end_reduction) / CLOCKS_PER_SEC;
+    double total_time_global = ((double) end_global) / CLOCKS_PER_SEC;
 
     printf("Reducao: %lld.\n", matrix_E->reduction);
     printf("Tempo soma: %lf segundos.\n", total_time_sum);
