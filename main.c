@@ -1,6 +1,8 @@
 /*
- * Compilation: gcc -o main matrix.c main.c
+ * Compilation: gcc -o -pthread exec matrix.c main.c
  * Executation: ./main numThreads numDimension matrixA.txt matrixB.txt matrixC.txt matrixD.txt matrixE.txt
+ *              ./main numThreads numDimension matrixA100.txt matrixB100.txt matrixC100.txt matrixD100.txt matrixE100.txt
+ *              ./main numThreads numDimension matrixA1k.txt matrixB1k.txt matrixC1k.txt matrixD1k.txt matrixE1k.txt       
 */
 
 #include <stdio.h>
@@ -15,29 +17,29 @@ int main(int argc, char* argv[]) {
     if (argc != 8) 
     {
         printf("Quantidade de argumentos incorreta.\n");
-        exit(-1);
+        exit(EXIT_FAILURE);
     }
 
-    int num_threads = stringToInt(argv[1]);
-    int dimension = stringToInt(argv[2]);
+    long int num_threads = stringToInt(argv[1]);
+    long int dimension = stringToInt(argv[2]);
 
     clock_t start_global, end_global, start_sum, end_sum, start_multiplication, end_multiplication, start_reduction, end_reduction;
     FILE *archive_matrix_A, *archive_matrix_B, *archive_matrix_C, *archive_matrix_D, *archive_matrix_E;
 
     archive_matrix_A = fopen(argv[3], "r");
-    if (archive_matrix_A == NULL) { printf("Arquivo da matriz A nao foi aberto.\n"); return 1; }
+    if (archive_matrix_A == NULL) { printf("Arquivo da matriz A nao foi aberto.\n"); exit(EXIT_FAILURE); }
 
     archive_matrix_B = fopen(argv[4], "r");
-    if (archive_matrix_B == NULL) { printf("Arquivo da matriz B nao foi aberto.\n"); return 1; }
+    if (archive_matrix_B == NULL) { printf("Arquivo da matriz B nao foi aberto.\n"); exit(EXIT_FAILURE); }
 
     archive_matrix_C = fopen(argv[5], "r");
-    if (archive_matrix_C == NULL) { printf("Arquivo da matriz C nao foi aberto.\n"); return 1; }
+    if (archive_matrix_C == NULL) { printf("Arquivo da matriz C nao foi aberto.\n"); exit(EXIT_FAILURE); }
 
     archive_matrix_D = fopen(argv[6], "w");
-    if (archive_matrix_D == NULL) { printf("Arquivo da matriz D nao foi aberto.\n"); return 1; }
+    if (archive_matrix_D == NULL) { printf("Arquivo da matriz D nao foi aberto.\n"); exit(EXIT_FAILURE); }
 
     archive_matrix_E = fopen(argv[7], "w");
-    if (archive_matrix_E == NULL) { printf("Arquivo da matriz E nao foi aberto.\n"); return 1; }
+    if (archive_matrix_E == NULL) { printf("Arquivo da matriz E nao foi aberto.\n"); exit(EXIT_FAILURE); }
 
 /* DECLARATIONS ********************************************************************************************************************* */
 
@@ -121,5 +123,6 @@ int stringToInt (char* argv) {
     if (!*endPtr)
         return number;
     else
-        return -2;
+        printf("Conversao stringToInt falhou.\n");
+        exit(EXIT_FAILURE);
 }
