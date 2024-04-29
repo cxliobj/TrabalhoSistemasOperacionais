@@ -9,8 +9,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "matrix.h"
-
-int stringToInt (char* argv);
+#include "string.h"
 
 int main(int argc, char* argv[]) {
 
@@ -112,17 +111,4 @@ int main(int argc, char* argv[]) {
     printf("Tempo total: %lf segundos.\n", total_time_global);
 
     return 0;
-}
-
-/* FUNCTIONS ************************************************************************************************************************ */
-
-int stringToInt (char* argv) {
-    char *endPtr;
-    long int number = strtol(argv, &endPtr, 10);
-
-    if (!*endPtr)
-        return number;
-    else
-        printf("Conversao stringToInt falhou.\n");
-        exit(EXIT_FAILURE);
 }
