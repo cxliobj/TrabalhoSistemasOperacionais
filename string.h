@@ -1,6 +1,9 @@
-#ifndef MATRIX_HPP
+#include <stdio.h>
+#include <stdlib.h>
 
-    #define MATRIX_HPP
+#ifndef STRING_HPP
+
+    #define STRING_HPP
 
     int stringToInt (char* argv);
 
