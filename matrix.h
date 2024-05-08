@@ -1,30 +1,27 @@
+#ifndef MATRIX_HPP
+#define MATRIX_HPP
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 
-#ifndef MATRIX_HPP
+#define position(I, J, DIMENSION) ((I)*(DIMENSION) + (J))
 
-    #define MATRIX_HPP
-
-    #define position(I, J, DIMENSION) ((I)*(DIMENSION) + (J))
-
-    typedef struct Matrix 
+    typedef struct Matrix
     {
         FILE* fileArray;
-        int* array;
+        long long int* array;
         int dimension;
-        long long reduction;
     } Matrix;
 
-    Matrix* newMatrix (int dimension, FILE* argv_file_matrix);
+    void* transcribeMatrix (void* matrix_ref);
 
-    void sumMatrix (Matrix* matrix1, Matrix* matrix2, Matrix* matrix3);
+    void* writeMatrix (void* matrix_ref);
 
-    void multiplyMatrix (Matrix* matrix1, Matrix* matrix2, Matrix* matrix3);
+    void* sumMatrix(void* matrix_ref);
 
-    void transcribeMatrix (Matrix* matrix);
+    void* multiplyMatrix (void* matrix_ref);
 
-    void writeMatrix (Matrix* matrix);
+    void* reduceMatrix (void* matrix_ref);
 
-    void reduceMatrix (Matrix* matrix);
-
-    #endif
+#endif

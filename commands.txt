@@ -1,0 +1,29 @@
+Compilation: 
+
+gcc -Wall -o main matrix.c string.c main.c -pthread
+
+Executation: 
+
+- 1 thread
+             
+./main 1 100 ./teste100/matrixA100.txt ./teste100/matrixB100.txt ./teste100/matrixC100.txt ./teste100/matrixD100.txt ./teste100/matrixE100.txt
+
+./main 1 1000 ./teste1k/matrixA1k.txt ./teste1k/matrixB1k.txt ./teste1k/matrixC1k.txt ./teste1k/matrixD1k.txt ./teste1k/matrixE1k.txt
+
+./main 1 2000 ./teste2k/matrixA2k.txt ./teste2k/matrixB2k.txt ./teste2k/matrixC2k.txt ./teste2k/matrixD2k.txt ./teste2k/matrixE2k.txt
+
+- 2 threads
+
+./main 2 100 ./teste100/matrixA100.txt ./teste100/matrixB100.txt ./teste100/matrixC100.txt ./teste100/matrixD100.txt ./teste100/matrixE100.txt
+
+./main 2 1000 ./teste1k/matrixA1k.txt ./teste1k/matrixB1k.txt ./teste1k/matrixC1k.txt ./teste1k/matrixD1k.txt ./teste1k/matrixE1k.txt
+
+./main 2 2000 ./teste2k/matrixA2k.txt ./teste2k/matrixB2k.txt ./teste2k/matrixC2k.txt ./teste2k/matrixD2k.txt ./teste2k/matrixE2k.txt
+
+- 4 threads
+
+./main 4 100 ./teste100/matrixA100.txt ./teste100/matrixB100.txt ./teste100/matrixC100.txt ./teste100/matrixD100.txt ./teste100/matrixE100.txt
+
+./main 4 1000 ./teste1k/matrixA1k.txt ./teste1k/matrixB1k.txt ./teste1k/matrixC1k.txt ./teste1k/matrixD1k.txt ./teste1k/matrixE1k.txt
+
+./main 4 2000 ./teste2k/matrixA2k.txt ./teste2k/matrixB2k.txt ./teste2k/matrixC2k.txt ./teste2k/matrixD2k.txt ./teste2k/matrixE2k.txt

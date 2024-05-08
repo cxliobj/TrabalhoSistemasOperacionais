@@ -1,54 +1,35 @@
-/*
- * Ideal Compilation: gcc -o -pthread exec matrix.c string.c main.c
- * Compilation now: gcc -o exec matrix.c string.c main.c
- * Executation: ./exec numThreads numDimension matrixA.txt matrixB.txt matrixC.txt matrixD.txt matrixE.txt
- *              ./exec numThreads numDimension matrixA100.txt matrixB100.txt matrixC100.txt matrixD100.txt matrixE100.txt
- *              ./exec numThreads numDimension matrixA1k.txt matrixB1k.txt matrixC1k.txt matrixD1k.txt matrixE1k.txt
- *              ./exec numThreads numDimension matrixA2k.txt matrixB2k.txt matrixC2k.txt matrixD2k.txt matrixE2k.txt
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 #include <time.h>
 #include "matrix.h"
 #include "string.h"
 
-int main(int argc, char* argv[]) {
-
+int main(int argc, char** argv)
+{
     if (argc != 8) 
     {
         printf("Quantidade de argumentos incorreta.\n");
         exit(EXIT_FAILURE);
     }
 
+    clock_t start_global, end_global, start_sum, end_sum, start_multiplication, end_multiplication, start_reduction, end_reduction;
     long int num_threads = stringToInt(argv[1]);
     long int dimension = stringToInt(argv[2]);
+    Matrix matrix[5];
+    pthread_t tids[num_threads];
 
-    clock_t start_global, end_global, start_sum, end_sum, start_multiplication, end_multiplication, start_reduction, end_reduction;
-    FILE *archive_matrix_A, *archive_matrix_B, *archive_matrix_C, *archive_matrix_D, *archive_matrix_E;
-
-    archive_matrix_A = fopen(argv[3], "r");
-    if (archive_matrix_A == NULL) { printf("Arquivo da matriz A nao foi aberto.\n"); exit(EXIT_FAILURE); }
-
-    archive_matrix_B = fopen(argv[4], "r");
-    if (archive_matrix_B == NULL) { printf("Arquivo da matriz B nao foi aberto.\n"); exit(EXIT_FAILURE); }
-
-    archive_matrix_C = fopen(argv[5], "r");
-    if (archive_matrix_C == NULL) { printf("Arquivo da matriz C nao foi aberto.\n"); exit(EXIT_FAILURE); }
-
-    archive_matrix_D = fopen(argv[6], "w");
-    if (archive_matrix_D == NULL) { printf("Arquivo da matriz D nao foi aberto.\n"); exit(EXIT_FAILURE); }
-
-    archive_matrix_E = fopen(argv[7], "w");
-    if (archive_matrix_E == NULL) { printf("Arquivo da matriz E nao foi aberto.\n"); exit(EXIT_FAILURE); }
-
-/* DECLARATIONS ********************************************************************************************************************* */
-
-    Matrix* matrix_A = newMatrix(dimension, archive_matrix_A);
-    Matrix* matrix_B = newMatrix(dimension, archive_matrix_B);
-    Matrix* matrix_C = newMatrix(dimension, archive_matrix_C);
-    Matrix* matrix_D = newMatrix(dimension, archive_matrix_D);
-    Matrix* matrix_E = newMatrix(dimension, archive_matrix_E);
+    for (int i = 0; i < 5; i++)
+    {
+        matrix[i].fileArray = fopen(argv[i + 3], "r+");
+        if (matrix[i].fileArray == NULL) 
+        { 
+            printf("Arquivo txt %d nao foi aberto.\n", i); 
+            exit(EXIT_FAILURE); 
+        }
+        matrix[i].dimension = dimension;
+        matrix[i].array = (long long int*) calloc (dimension * dimension, sizeof(long long int));
+    }
 
 /* START **************************************************************************************************************************** */
 
@@ -56,49 +37,57 @@ int main(int argc, char* argv[]) {
 
     // PASSO 1 (2 threads Tl)
 
-    transcribeMatrix(matrix_A);
-    transcribeMatrix(matrix_B);
+    for (int i = 0; i < 2; i++)
+    {
+        pthread_create(&tids[i], NULL, transcribeMatrix, &matrix[i]);
+    }
 
-    fclose(matrix_A->fileArray);
-    fclose(matrix_B->fileArray);
+    for (int i = 0; i < 2; i++)
+    {
+        pthread_join(tids[i], NULL);
+    }
 
     // PASSO 2 (T threads Tp)
 
     start_sum = clock();
-    sumMatrix(matrix_A, matrix_B, matrix_D);
-    end_sum = clock() - start_sum;
 
-    free(matrix_A);
-    free(matrix_B);
+    pthread_create(&tids[0], NULL, sumMatrix, &matrix);
+    pthread_join(tids[0], NULL);
+
+    end_sum = clock() - start_sum;
 
     // PASSO 3 (1 thread Te)
 
-    writeMatrix(matrix_D);
-    fclose(matrix_D->fileArray);
+    pthread_create(&tids[0], NULL, writeMatrix, &matrix[3]);
+    pthread_join(tids[0], NULL);
 
     // PASSO 4 (1 thread Tl)
 
-    transcribeMatrix(matrix_C);
-    fclose(matrix_C->fileArray);
+    pthread_create(&tids[0], NULL, transcribeMatrix, &matrix[2]);
+    pthread_join(tids[0], NULL);
 
     // PASSO 5 (2 threads Tp)
 
     start_multiplication = clock();
-    multiplyMatrix(matrix_C, matrix_D, matrix_E);
+    
+    pthread_create(&tids[0], NULL, multiplyMatrix, &matrix);
+    pthread_join(tids[0], NULL);
+    
     end_multiplication = clock() - start_multiplication;
-
-    free(matrix_C);
-    free(matrix_D);
 
     // PASSO 6 (1 thread Te)
 
-    writeMatrix(matrix_E);
-    fclose(matrix_E->fileArray);
+    pthread_create(&tids[0], NULL, writeMatrix, &matrix[4]);
+    pthread_join(tids[0], NULL);
 
     // PASSO 7 (1 thread Tp)
 
     start_reduction = clock();
-    reduceMatrix(matrix_E);
+
+    long long* reduction;
+    pthread_create(&tids[0], NULL, reduceMatrix, &matrix[4]);
+    pthread_join(tids[0], (void**) &reduction);
+
     end_reduction = clock() - start_reduction;
 
     end_global = clock() - start_global;
@@ -110,7 +99,7 @@ int main(int argc, char* argv[]) {
     double total_time_reduction = ((double) end_reduction) / CLOCKS_PER_SEC;
     double total_time_global = ((double) end_global) / CLOCKS_PER_SEC;
 
-    printf("Reducao: %lld.\n", matrix_E->reduction);
+    printf("Reducao: %lld.\n", *reduction);
     printf("Tempo soma: %lf segundos.\n", total_time_sum);
     printf("Tempo multiplicacao: %lf segundos.\n", total_time_multiplication);
     printf("Tempo reducao: %lf segundos.\n", total_time_reduction);
