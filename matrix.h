@@ -11,8 +11,14 @@
     {
         FILE* fileArray;
         long long int* array;
-        int dimension;
+        long long int dimension;
     } Matrix;
+
+    Matrix* newMatrix ();
+
+    long long int* vectorAllocation(long long int dimension);
+
+    FILE* openFile(char* argv_file_matrix);
 
     void* transcribeMatrix (void* matrix_ref);
 

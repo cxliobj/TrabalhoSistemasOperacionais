@@ -4,6 +4,7 @@
 #include <time.h>
 #include "matrix.h"
 #include "string.h"
+#include "resources.h"
 
 int main(int argc, char** argv)
 {
@@ -13,79 +14,85 @@ int main(int argc, char** argv)
         exit(EXIT_FAILURE);
     }
 
+/* DECLARATIONS ********************************************************************************************************************* */
+
     clock_t start_global, end_global, start_sum, end_sum, start_multiplication, end_multiplication, start_reduction, end_reduction;
-    long int num_threads = stringToInt(argv[1]);
-    long int dimension = stringToInt(argv[2]);
-    Matrix matrix[5];
+    long long int num_threads = stringToInt(argv[1]);
+    long long int dimension = stringToInt(argv[2]);
     pthread_t tids[num_threads];
+    
+    Matrix* matrix = newMatrix();
 
     for (int i = 0; i < 5; i++)
     {
-        matrix[i].fileArray = fopen(argv[i + 3], "r+");
-        if (matrix[i].fileArray == NULL) 
-        { 
-            printf("Arquivo txt %d nao foi aberto.\n", i); 
-            exit(EXIT_FAILURE); 
-        }
+        matrix[i].fileArray = openFile(argv[i + 3]);
         matrix[i].dimension = dimension;
-        matrix[i].array = (long long int*) calloc (dimension * dimension, sizeof(long long int));
+        matrix[i].array = vectorAllocation(dimension);
     }
-
+    
 /* START **************************************************************************************************************************** */
 
     start_global = clock();
 
     // PASSO 1 (2 threads Tl)
-
+    int thread;
     for (int i = 0; i < 2; i++)
     {
-        pthread_create(&tids[i], NULL, transcribeMatrix, &matrix[i]);
+        thread = pthread_create(&tids[i], NULL, transcribeMatrix, (void*) &matrix[i]);
+    }
+    if (thread != 0)
+    {
+        printf("Erro na criacao da thread\n");
     }
 
     for (int i = 0; i < 2; i++)
     {
-        pthread_join(tids[i], NULL);
+        thread = pthread_join(tids[i], NULL);
+    }
+    if (thread != 0)
+    {
+        printf("Erro na juncao da thread\n");
     }
 
     // PASSO 2 (T threads Tp)
 
     start_sum = clock();
 
-    pthread_create(&tids[0], NULL, sumMatrix, &matrix);
+    pthread_create(&tids[0], NULL, sumMatrix, (void*) matrix);
     pthread_join(tids[0], NULL);
 
     end_sum = clock() - start_sum;
 
     // PASSO 3 (1 thread Te)
 
-    pthread_create(&tids[0], NULL, writeMatrix, &matrix[3]);
+    pthread_create(&tids[0], NULL, writeMatrix, (void*) &matrix[3]);
     pthread_join(tids[0], NULL);
 
     // PASSO 4 (1 thread Tl)
 
-    pthread_create(&tids[0], NULL, transcribeMatrix, &matrix[2]);
+    pthread_create(&tids[0], NULL, transcribeMatrix, (void*) &matrix[2]);
     pthread_join(tids[0], NULL);
 
     // PASSO 5 (2 threads Tp)
 
     start_multiplication = clock();
     
-    pthread_create(&tids[0], NULL, multiplyMatrix, &matrix);
+    pthread_create(&tids[0], NULL, multiplyMatrix, (void*) matrix);
     pthread_join(tids[0], NULL);
     
     end_multiplication = clock() - start_multiplication;
 
     // PASSO 6 (1 thread Te)
 
-    pthread_create(&tids[0], NULL, writeMatrix, &matrix[4]);
+    pthread_create(&tids[0], NULL, writeMatrix, (void*) &matrix[4]);
     pthread_join(tids[0], NULL);
 
     // PASSO 7 (1 thread Tp)
 
     start_reduction = clock();
 
-    long long* reduction;
-    pthread_create(&tids[0], NULL, reduceMatrix, &matrix[4]);
+    long long int* reduction;
+    pthread_create(&tids[0], NULL, reduceMatrix, (void*) &matrix[4]);
     pthread_join(tids[0], (void**) &reduction);
 
     end_reduction = clock() - start_reduction;
