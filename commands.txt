@@ -1,6 +1,6 @@
 Compilation: 
 
-gcc -Wall -o main matrix.c string.c main.c -pthread
+gcc -Wall -o main matrix.c string.c main.c resources.c -pthread
 
 Executation: 
 

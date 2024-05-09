@@ -9,7 +9,6 @@
 
     long long int* vectorAllocation(long long int dimension);
 
-    FILE* openFile(char* argv_file_matrix)
-
+    FILE* openFile(char* argv_file_matrix);
 
 #endif

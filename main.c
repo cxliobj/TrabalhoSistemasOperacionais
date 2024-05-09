@@ -6,6 +6,24 @@
 #include "string.h"
 #include "resources.h"
 
+void show_thread_create_error (int thread)
+{
+    if (thread != 0)
+    {
+        printf("Thread create failed.\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+void show_thread_join_error (int thread)
+{
+    if (thread != 0)
+    {
+        printf("Thread join failed.\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
 int main(int argc, char** argv)
 {
     if (argc != 8) 
@@ -39,61 +57,74 @@ int main(int argc, char** argv)
     for (int i = 0; i < 2; i++)
     {
         thread = pthread_create(&tids[i], NULL, transcribeMatrix, (void*) &matrix[i]);
-    }
-    if (thread != 0)
-    {
-        printf("Erro na criacao da thread\n");
+        show_thread_create_error(thread);
     }
 
     for (int i = 0; i < 2; i++)
     {
         thread = pthread_join(tids[i], NULL);
-    }
-    if (thread != 0)
-    {
-        printf("Erro na juncao da thread\n");
+        show_thread_join_error(thread);
     }
 
     // PASSO 2 (T threads Tp)
 
     start_sum = clock();
 
-    pthread_create(&tids[0], NULL, sumMatrix, (void*) matrix);
-    pthread_join(tids[0], NULL);
+    thread = pthread_create(&tids[0], NULL, sumMatrix, (void*) matrix);
+    show_thread_create_error(thread);
+
+    thread = pthread_join(tids[0], NULL);
+    show_thread_join_error(thread);
 
     end_sum = clock() - start_sum;
 
     // PASSO 3 (1 thread Te)
 
     pthread_create(&tids[0], NULL, writeMatrix, (void*) &matrix[3]);
+    show_thread_create_error(thread);
+
     pthread_join(tids[0], NULL);
+    show_thread_join_error(thread);
 
     // PASSO 4 (1 thread Tl)
 
     pthread_create(&tids[0], NULL, transcribeMatrix, (void*) &matrix[2]);
+    show_thread_create_error(thread);
+
     pthread_join(tids[0], NULL);
+    show_thread_join_error(thread);
 
     // PASSO 5 (2 threads Tp)
 
     start_multiplication = clock();
     
     pthread_create(&tids[0], NULL, multiplyMatrix, (void*) matrix);
+    show_thread_create_error(thread);
+
     pthread_join(tids[0], NULL);
+    show_thread_join_error(thread);
     
     end_multiplication = clock() - start_multiplication;
 
     // PASSO 6 (1 thread Te)
 
     pthread_create(&tids[0], NULL, writeMatrix, (void*) &matrix[4]);
+    show_thread_create_error(thread);
+
     pthread_join(tids[0], NULL);
+    show_thread_join_error(thread);
 
     // PASSO 7 (1 thread Tp)
 
     start_reduction = clock();
 
     long long int* reduction;
+    
     pthread_create(&tids[0], NULL, reduceMatrix, (void*) &matrix[4]);
+    show_thread_create_error(thread);
+
     pthread_join(tids[0], (void**) &reduction);
+    show_thread_join_error(thread);
 
     end_reduction = clock() - start_reduction;
 
