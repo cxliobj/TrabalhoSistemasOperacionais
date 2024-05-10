@@ -2,27 +2,9 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <time.h>
-#include "matrix.h"
-#include "string.h"
+#include "errorMessages.h"
 #include "resources.h"
-
-void show_thread_create_error (int thread)
-{
-    if (thread != 0)
-    {
-        printf("Thread create failed.\n");
-        exit(EXIT_FAILURE);
-    }
-}
-
-void show_thread_join_error (int thread)
-{
-    if (thread != 0)
-    {
-        printf("Thread join failed.\n");
-        exit(EXIT_FAILURE);
-    }
-}
+#include "matrix.h"
 
 int main(int argc, char** argv)
 {
@@ -75,7 +57,7 @@ int main(int argc, char** argv)
 
     thread = pthread_join(tids[0], NULL);
     show_thread_join_error(thread);
-
+    
     end_sum = clock() - start_sum;
 
     // PASSO 3 (1 thread Te)
