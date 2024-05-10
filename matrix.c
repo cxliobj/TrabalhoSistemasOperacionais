@@ -33,17 +33,49 @@ void* writeMatrix (void* matrix_ref)
     pthread_exit(NULL);
 }
 
-void* sumMatrix(void* matrix_ref)
+void* thrdSomaParcial(void* parameters_ref)
 {
-    Matrix* matrix = (Matrix*) matrix_ref;
-    long long int size = matrix[0].dimension * matrix[0].dimension;
-    register unsigned int i;
+    ThreadParameters* parameters = (ThreadParameters*) parameters_ref;
+    register unsigned int i, start, final;
+    long long int* array1;
+    long long int* array2;
+    long long int* array3;
+    start = parameters->idx_start;
+    final  = parameters->idx_final;
+    array1 = parameters->array1;
+    array2 = parameters->array2;
+    array3 = parameters->array3;
 
-    for (i = 0; i < size; i++)
+    for (i = start; i <= final; i++)
     {
-        (matrix[3].array)[i] = (matrix[0].array)[i] + (matrix[1].array)[i];
+        array3[i] = array1[i] + array2[i];
     }
     pthread_exit(NULL);
+}
+
+void sumMatrix(long long int* array1, long long int* array2, long long int* array3, long long dimension, long long int num_threads)
+{
+    register unsigned int i;
+    ThreadParameters* parameters = newThreadParameters(num_threads);
+    pthread_t* tids = newThreadIDs(num_threads);
+    
+    long long int quantElementos = (dimension * dimension) / num_threads;
+    for (i = 0; i < num_threads; i++)
+    {
+        parameters[i].idx_start = quantElementos * i;
+        parameters[i].idx_final = (quantElementos * (i+1)) - 1;
+        parameters[i].array1 = array1;
+        parameters[i].array2 = array2;
+        parameters[i].array3 = array3;
+        int thread = pthread_create(&tids[i], NULL, thrdSomaParcial, (void*) &parameters[i]);
+        show_thread_create_error(thread);
+    }
+    for (int i = 0; i < num_threads; i++)
+    {
+        int thread = pthread_join(tids[i], NULL);
+        show_thread_join_error (thread);
+    }
+    free(parameters);
 }
 
 void* multiplyMatrix (void* matrix_ref)

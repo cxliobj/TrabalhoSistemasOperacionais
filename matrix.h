@@ -13,7 +13,9 @@
 
     void* writeMatrix (void* matrix_ref);
 
-    void* sumMatrix(void* matrix_ref);
+    void* thrdSomaParcial(void* parameters_ref);
+
+    void sumMatrix(long long int* array1, long long int* array2, long long int* array3, long long dimension, long long int num_threads);
 
     void* multiplyMatrix (void* matrix_ref);
 

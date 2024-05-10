@@ -20,7 +20,6 @@ int main(int argc, char** argv)
     long long int num_threads = stringToInt(argv[1]);
     long long int dimension = stringToInt(argv[2]);
     pthread_t tids[num_threads];
-    
     Matrix* matrix = newMatrix();
 
     for (int i = 0; i < 5; i++)
@@ -51,13 +50,9 @@ int main(int argc, char** argv)
     // PASSO 2 (T threads Tp)
 
     start_sum = clock();
-
-    thread = pthread_create(&tids[0], NULL, sumMatrix, (void*) matrix);
-    show_thread_create_error(thread);
-
-    thread = pthread_join(tids[0], NULL);
-    show_thread_join_error(thread);
     
+    sumMatrix(matrix[0].array, matrix[1].array, matrix[3].array, dimension, num_threads);
+
     end_sum = clock() - start_sum;
 
     // PASSO 3 (1 thread Te)
