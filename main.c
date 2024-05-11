@@ -57,11 +57,7 @@ int main(int argc, char** argv)
 
     // PASSO 3 (1 thread Te)
 
-    pthread_create(&tids[0], NULL, writeMatrix, (void*) &matrix[3]);
-    show_thread_create_error(thread);
-
-    pthread_join(tids[0], NULL);
-    show_thread_join_error(thread);
+    writeMatrix (matrix[3].array, matrix[3].fileArray, dimension, num_threads);
 
     // PASSO 4 (1 thread Tl)
 
@@ -71,25 +67,17 @@ int main(int argc, char** argv)
     pthread_join(tids[0], NULL);
     show_thread_join_error(thread);
 
-    // PASSO 5 (2 threads Tp)
+    // PASSO 5 (T threads Tp)
 
     start_multiplication = clock();
     
-    pthread_create(&tids[0], NULL, multiplyMatrix, (void*) matrix);
-    show_thread_create_error(thread);
-
-    pthread_join(tids[0], NULL);
-    show_thread_join_error(thread);
+    multiplyMatrix(matrix[3].array, matrix[2].array, matrix[4].array, dimension, num_threads);
     
     end_multiplication = clock() - start_multiplication;
 
     // PASSO 6 (1 thread Te)
 
-    pthread_create(&tids[0], NULL, writeMatrix, (void*) &matrix[4]);
-    show_thread_create_error(thread);
-
-    pthread_join(tids[0], NULL);
-    show_thread_join_error(thread);
+    writeMatrix (matrix[4].array, matrix[4].fileArray, dimension, num_threads);
 
     // PASSO 7 (1 thread Tp)
 

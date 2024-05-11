@@ -20,6 +20,8 @@
         long long int* array1;
         long long int* array2;
         long long int* array3;
+        long long int dimension;
+        FILE* fileArray;
     } ThreadParameters;
 
     Matrix* newMatrix ();

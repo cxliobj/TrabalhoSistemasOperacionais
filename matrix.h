@@ -11,13 +11,17 @@
 
     void* transcribeMatrix (void* matrix_ref);
 
-    void* writeMatrix (void* matrix_ref);
+    void* threadWriteMatrix (void* parameters_ref);
+
+    void writeMatrix (long long int* array1, FILE* fileArray, long long int dimension, long long int num_threads);
 
     void* thrdSomaParcial(void* parameters_ref);
 
     void sumMatrix(long long int* array1, long long int* array2, long long int* array3, long long dimension, long long int num_threads);
 
-    void* multiplyMatrix (void* matrix_ref);
+    void* threadPartialMulti (void* parameters_ref);
+
+    void multiplyMatrix(long long int* array1, long long int* array2, long long int* array3, long long dimension, long long int num_threads);
 
     void* reduceMatrix (void* matrix_ref);
 
