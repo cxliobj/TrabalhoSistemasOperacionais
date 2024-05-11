@@ -37,7 +37,7 @@ void* threadWriteMatrix (void* parameters_ref)
     pthread_exit(NULL);
 }
 
-void writeMatrix (long long int* array1, FILE* fileArray, long long int dimension, long long int num_threads)
+void writeMatrix (long long int* array1, FILE* fileArray, long long int dimension)
 {
     ThreadParameters* parameters = newThreadParameters(1);
     pthread_t* tids = newThreadIDs(1);
@@ -56,7 +56,7 @@ void writeMatrix (long long int* array1, FILE* fileArray, long long int dimensio
     free(tids);
 }
 
-void* thrdSomaParcial (void* parameters_ref)
+void* threadPartialSum (void* parameters_ref)
 {
     ThreadParameters* parameters = (ThreadParameters*) parameters_ref;
     register unsigned int i, start, final;
@@ -90,7 +90,7 @@ void sumMatrix (long long int* array1, long long int* array2, long long int* arr
         parameters[i].array1 = array1;
         parameters[i].array2 = array2;
         parameters[i].array3 = array3;
-        int thread = pthread_create(&tids[i], NULL, thrdSomaParcial, (void*) &parameters[i]);
+        int thread = pthread_create(&tids[i], NULL, threadPartialSum, (void*) &parameters[i]);
         show_thread_create_error(thread);
     }
     for (int i = 0; i < num_threads; i++)
@@ -154,24 +154,53 @@ void multiplyMatrix(long long int* array1, long long int* array2, long long int*
     free(tids);
 }
 
-void* reduceMatrix (void* matrix_ref)
+void* threadReduceMatrix (void* parameters_ref)
 {
-    Matrix* matrix = (Matrix*) matrix_ref;
-    long long int size = matrix->dimension * matrix->dimension;
+    ThreadParameters* parameters = (ThreadParameters*) parameters_ref;
+    long long int* array;
     long long int sum = 0;
-    register unsigned int i;
+    register unsigned int i, start, final;
+    array = parameters->array1;
+    start = parameters->idx_start;
+    final = parameters->idx_final;
 
-    for (i = 0; i < size; i++)
+    for (i = start; i < final; i++)
     {
-        sum += (matrix->array)[i];
+        sum += array[i];
     }
 
     long long int* answer = malloc(sizeof(answer));
-    if (answer == NULL)
-    {
-        printf("Erro no malloc answer.\n");
-        exit(EXIT_FAILURE);
-    }
+    show_error_allocation_memory(answer);
     *answer = sum;
     pthread_exit(answer);
+}
+
+long long int reduceMatrix (long long int* array1, long long dimension, long long int num_threads)
+{
+    register unsigned int i;
+    ThreadParameters* parameters = newThreadParameters(num_threads);
+    pthread_t* tids = newThreadIDs(num_threads);
+    long long int sum = 0;
+    long long int* partialSum = NULL;
+    
+    long long int quantElementos = (dimension * dimension) / num_threads;
+    for (i = 0; i < num_threads; i++)
+    {
+        parameters[i].idx_start = quantElementos * i;
+        parameters[i].idx_final = (quantElementos * (i+1));
+        parameters[i].array1 = array1;
+        int thread = pthread_create(&tids[i], NULL, threadReduceMatrix, (void*) &parameters[i]);
+        show_thread_create_error(thread);
+    }
+    for (int i = 0; i < num_threads; i++)
+    {
+        int thread = pthread_join(tids[i], (void**) &partialSum);
+        show_thread_join_error (thread);
+
+        sum += *(long long int*)partialSum;
+        free(partialSum);
+    }
+    free(parameters);
+    free(tids);
+    return sum;
 }

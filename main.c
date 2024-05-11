@@ -57,7 +57,7 @@ int main(int argc, char** argv)
 
     // PASSO 3 (1 thread Te)
 
-    writeMatrix (matrix[3].array, matrix[3].fileArray, dimension, num_threads);
+    writeMatrix (matrix[3].array, matrix[3].fileArray, dimension);
 
     // PASSO 4 (1 thread Tl)
 
@@ -77,19 +77,13 @@ int main(int argc, char** argv)
 
     // PASSO 6 (1 thread Te)
 
-    writeMatrix (matrix[4].array, matrix[4].fileArray, dimension, num_threads);
+    writeMatrix (matrix[4].array, matrix[4].fileArray, dimension);
 
     // PASSO 7 (1 thread Tp)
 
     start_reduction = clock();
 
-    long long int* reduction;
-    
-    pthread_create(&tids[0], NULL, reduceMatrix, (void*) &matrix[4]);
-    show_thread_create_error(thread);
-
-    pthread_join(tids[0], (void**) &reduction);
-    show_thread_join_error(thread);
+    long long int reduction = reduceMatrix(matrix[4].array, dimension, num_threads);
 
     end_reduction = clock() - start_reduction;
 
@@ -102,7 +96,7 @@ int main(int argc, char** argv)
     double total_time_reduction = ((double) end_reduction) / CLOCKS_PER_SEC;
     double total_time_global = ((double) end_global) / CLOCKS_PER_SEC;
 
-    printf("Reducao: %lld.\n", *reduction);
+    printf("Reducao: %lld.\n", reduction);
     printf("Tempo soma: %lf segundos.\n", total_time_sum);
     printf("Tempo multiplicacao: %lf segundos.\n", total_time_multiplication);
     printf("Tempo reducao: %lf segundos.\n", total_time_reduction);
