@@ -1,13 +1,12 @@
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
+#define position(I, J, DIMENSION) ((I)*(DIMENSION) + (J))
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
 #include "errorMessages.h"
 #include "resources.h"
-
-#define position(I, J, DIMENSION) ((I)*(DIMENSION) + (J))
 
     void* threadtranscribeMatrix (void* parameters_ref);
 

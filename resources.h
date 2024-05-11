@@ -6,13 +6,6 @@
 #include <pthread.h>
 #include "errorMessages.h"
 
-    typedef struct Matrix
-    {
-        FILE* fileArray;
-        long long int* array;
-        long long int dimension;
-    } Matrix;
-
     typedef struct ThreadParameters
     {
         int idx_start;
@@ -24,13 +17,11 @@
         FILE* fileArray;
     } ThreadParameters;
 
-    Matrix* newMatrix ();
-
     pthread_t* newThreadIDs(int num_threads);
 
     ThreadParameters* newThreadParameters (int num_threads);
 
-    long long int* newVector (long long int dimension);
+    long long int* newMatrix (long long int dimension);
 
     FILE* openFile(char* argv_file_matrix);
 

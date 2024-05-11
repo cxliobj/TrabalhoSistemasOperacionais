@@ -1,12 +1,5 @@
 #include "resources.h"
 
-Matrix* newMatrix ()
-{
-    Matrix* matrix = (Matrix*) malloc(5 * sizeof(Matrix));
-    show_error_allocation_memory(matrix);
-    return matrix;
-}
-
 pthread_t* newThreadIDs(int num_threads)
 {
     show_error_size_allocation_memory(num_threads);
@@ -23,7 +16,7 @@ ThreadParameters* newThreadParameters (int num_threads)
     return parameters;
 }
 
-long long int* newVector (long long int dimension)
+long long int* newMatrix (long long int dimension)
 {
     show_error_size_allocation_memory(dimension);
     long long int* vector = (long long int*) calloc (dimension * dimension, sizeof(long long int));

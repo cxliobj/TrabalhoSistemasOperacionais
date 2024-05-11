@@ -44,3 +44,31 @@ void show_error_open_file (FILE* file)
         exit(EXIT_FAILURE); 
     }
 }
+
+void show_error_num_args (int argc)
+{
+    if (argc != 8) 
+    {
+        printf("Invalid arguments quantity.\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+void show_error_numThreads_dimension (long long int num_threads, long long int dimension)
+{
+    if (num_threads <= 0)
+    {
+        printf("Invalid threads number.\n");
+        exit(EXIT_FAILURE);
+    }
+    if (dimension <= 0)
+    {
+       printf("Invalid dimension number.\n");
+        exit(EXIT_FAILURE); 
+    }
+    if (dimension % num_threads != 0)
+    {
+        printf("Number of threads is incompatible with the dimension number.\n");
+        exit(EXIT_FAILURE);
+    }
+}

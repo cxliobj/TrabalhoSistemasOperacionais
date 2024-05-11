@@ -14,4 +14,8 @@
 
     void show_error_open_file (FILE* file);
 
+    void show_error_num_args (int argc);
+
+    void show_error_numThreads_dimension (long long int num_threads, long long int dimension);
+
 #endif
