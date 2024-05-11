@@ -23,7 +23,7 @@ ThreadParameters* newThreadParameters (int num_threads)
     return parameters;
 }
 
-long long int* vectorAllocation(long long int dimension)
+long long int* newVector (long long int dimension)
 {
     show_error_size_allocation_memory(dimension);
     long long int* vector = (long long int*) calloc (dimension * dimension, sizeof(long long int));

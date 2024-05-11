@@ -30,7 +30,7 @@
 
     ThreadParameters* newThreadParameters (int num_threads);
 
-    long long int* vectorAllocation(long long int dimension);
+    long long int* newVector (long long int dimension);
 
     FILE* openFile(char* argv_file_matrix);
 

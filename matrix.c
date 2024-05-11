@@ -1,18 +1,41 @@
 #include "matrix.h"
 
-void* transcribeMatrix (void* matrix_ref)
+void* threadtranscribeMatrix (void* parameters_ref)
 {
-    Matrix* matrix = (Matrix*) matrix_ref;
+    ThreadParameters* parameters = (ThreadParameters*) parameters_ref;
+    register unsigned int i=0;
+    FILE* fileArray;
+    long long int* array;
     long long int finput=0;
-    register unsigned int i = 0;
+    fileArray = parameters->fileArray;
+    array = parameters->array1;
 
-    while (fscanf(matrix->fileArray, "%lld", &finput) != EOF)
+    while (fscanf(fileArray, "%lld", &finput) != EOF)
     {
-        (matrix->array)[i] = finput;
+        array[i] = finput;
         i++;
     }
-    fclose(matrix->fileArray);
+    fclose(fileArray);
     pthread_exit(NULL);
+}
+
+void transcribeMatrix (long long int* array1, FILE* fileArray, long long int dimension)
+{
+    ThreadParameters* parameters = newThreadParameters(1);
+    pthread_t* tids = newThreadIDs(1);
+    int thread;
+    parameters[0].array1 = array1;
+    parameters[0].dimension = dimension;
+    parameters[0].fileArray = fileArray;
+
+    thread = pthread_create(&tids[0], NULL, threadtranscribeMatrix, (void*) &parameters[0]);
+    show_thread_create_error(thread);
+
+    thread = pthread_join(tids[0], NULL);
+    show_thread_join_error (thread);
+
+    free(parameters);
+    free(tids);
 }
 
 void* threadWriteMatrix (void* parameters_ref)

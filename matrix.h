@@ -9,7 +9,9 @@
 
 #define position(I, J, DIMENSION) ((I)*(DIMENSION) + (J))
 
-    void* transcribeMatrix (void* matrix_ref);
+    void* threadtranscribeMatrix (void* parameters_ref);
+
+    void transcribeMatrix (long long int* array1, FILE* fileArray, long long int dimension);
 
     void* threadWriteMatrix (void* parameters_ref);
 

@@ -19,14 +19,13 @@ int main(int argc, char** argv)
     clock_t start_global, end_global, start_sum, end_sum, start_multiplication, end_multiplication, start_reduction, end_reduction;
     long long int num_threads = stringToInt(argv[1]);
     long long int dimension = stringToInt(argv[2]);
-    pthread_t tids[num_threads];
     Matrix* matrix = newMatrix();
 
     for (int i = 0; i < 5; i++)
     {
         matrix[i].fileArray = openFile(argv[i + 3]);
         matrix[i].dimension = dimension;
-        matrix[i].array = vectorAllocation(dimension);
+        matrix[i].array = newVector(dimension);
     }
     
 /* START **************************************************************************************************************************** */
@@ -34,18 +33,9 @@ int main(int argc, char** argv)
     start_global = clock();
 
     // PASSO 1 (2 threads Tl)
-    int thread;
-    for (int i = 0; i < 2; i++)
-    {
-        thread = pthread_create(&tids[i], NULL, transcribeMatrix, (void*) &matrix[i]);
-        show_thread_create_error(thread);
-    }
 
-    for (int i = 0; i < 2; i++)
-    {
-        thread = pthread_join(tids[i], NULL);
-        show_thread_join_error(thread);
-    }
+    transcribeMatrix (matrix[0].array, matrix[0].fileArray, dimension);
+    transcribeMatrix (matrix[1].array, matrix[1].fileArray, dimension);
 
     // PASSO 2 (T threads Tp)
 
@@ -61,11 +51,7 @@ int main(int argc, char** argv)
 
     // PASSO 4 (1 thread Tl)
 
-    pthread_create(&tids[0], NULL, transcribeMatrix, (void*) &matrix[2]);
-    show_thread_create_error(thread);
-
-    pthread_join(tids[0], NULL);
-    show_thread_join_error(thread);
+    transcribeMatrix (matrix[2].array, matrix[2].fileArray, dimension);
 
     // PASSO 5 (T threads Tp)
 
