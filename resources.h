@@ -4,17 +4,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <errno.h>
 #include "errorMessages.h"
 
     typedef struct ThreadParameters
     {
-        int idx_start;
-        int idx_final;
+        FILE* fileArray;
         long long int* array1;
         long long int* array2;
         long long int* array3;
-        long long int dimension;
-        FILE* fileArray;
+        int dimension;
+        int idx_start;
+        int idx_final;
     } ThreadParameters;
 
     pthread_t* newThreadIDs(int num_threads);

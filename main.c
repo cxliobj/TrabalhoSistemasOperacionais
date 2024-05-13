@@ -8,14 +8,12 @@
 
 int main(int argc, char** argv)
 {
-    show_error_num_args(argc);
+    verify_num_args(argc);
 
 /*** DECLARATIONS ******************************************************************************************************************* */
 
-    long long int num_threads = stringToInt(argv[1]);
-    long long int dimension = stringToInt(argv[2]);
-
-    show_error_numThreads_dimension (num_threads, dimension);
+    int num_threads = (int) stringToInt(argv[1]);
+    int dimension = (int) stringToInt(argv[2]);
 
     long long int* matrix[5];
     FILE* file[5];
@@ -34,8 +32,8 @@ int main(int argc, char** argv)
     PASSO 1: Leitura da Matriz A // Leitura da Matriz B (2 threads Tl)
     */
 
-    transcribeMatrix (matrix[0], file[0], dimension);
-    transcribeMatrix (matrix[1], file[1], dimension);
+    thread_matrix_transcribe (file[0], matrix[0], dimension);
+    thread_matrix_transcribe (file[1], matrix[1], dimension);
 
     /*
     PASSO 2: Soma das Matrizes A + B = D (T threads Tp)
@@ -43,7 +41,7 @@ int main(int argc, char** argv)
 
     clock_t start_sum = clock();
     
-    sumMatrix(matrix[0], matrix[1], matrix[3], dimension, num_threads);
+    thread_matrix_sum (matrix[0], matrix[1], matrix[3], dimension, num_threads);
 
     clock_t end_sum = clock() - start_sum;
 
@@ -51,9 +49,9 @@ int main(int argc, char** argv)
     PASSO 3 // PASSO 4: Gravação da Matriz D // Leitura da Matriz C (1 thread Te e 1 thread Tl)
     */
 
-    writeMatrix (matrix[3], file[3], dimension);
+    thread_matrix_write (file[3], matrix[3], dimension);
 
-    transcribeMatrix (matrix[2], file[2], dimension);
+    thread_matrix_transcribe (file[2], matrix[2], dimension);
 
     /*
     PASSO 5: Multiplicação das Matrizes D x C = E (T threads Tp)
@@ -61,7 +59,7 @@ int main(int argc, char** argv)
 
     clock_t start_multiplication = clock();
     
-    multiplyMatrix(matrix[3], matrix[2], matrix[4], dimension, num_threads);
+    thread_matrix_multiplication (matrix[3], matrix[2], matrix[4], dimension, num_threads);
     
     clock_t end_multiplication = clock() - start_multiplication;
 
@@ -69,11 +67,11 @@ int main(int argc, char** argv)
     PASSO 6 // PASSO 7: Gravação da Matriz E // Redução da Matriz E (1 thread Te e T threads Tp)
     */
 
-    writeMatrix (matrix[4], file[4], dimension);
+    thread_matrix_write (file[4], matrix[4], dimension);
 
     clock_t start_reduction = clock();
 
-    long long int reduction = reduceMatrix(matrix[4], dimension, num_threads);
+    long long int reduction = thread_matrix_reduce (matrix[4], dimension, num_threads);
 
     clock_t end_reduction = clock() - start_reduction;
 

@@ -8,24 +8,24 @@
 #include "errorMessages.h"
 #include "resources.h"
 
-    void* threadTranscribeMatrix (void* parameters_ref);
+void* matrix_transcribe (void* parameters_ref);
 
-    void transcribeMatrix (long long int* array1, FILE* fileArray, long long int dimension);
+void thread_matrix_transcribe (FILE* fileArray, long long int* array1, int dimension);
 
-    void* threadWriteMatrix (void* parameters_ref);
+void* matrix_write (void* parameters_ref);
 
-    void writeMatrix (long long int* array1, FILE* fileArray, long long int dimension);
+void thread_matrix_write (FILE* fileArray, long long int* array1, int dimension);
 
-    void* threadPartialSum(void* parameters_ref);
+void* matrix_sum (void* parameters_ref);
 
-    void sumMatrix(long long int* array1, long long int* array2, long long int* array3, long long dimension, long long int num_threads);
+void thread_matrix_sum (long long int* array1, long long int* array2, long long int* array3, int dimension, int num_threads);
 
-    void* threadPartialMulti (void* parameters_ref);
+void* matrix_multiplication (void* parameters_ref);
 
-    void multiplyMatrix(long long int* array1, long long int* array2, long long int* array3, long long dimension, long long int num_threads);
+void thread_matrix_multiplication (long long int* array1, long long int* array2, long long int* array3, int dimension, int num_threads);
 
-    void* threadReduceMatrix (void* parameters_ref);
+void* matrix_reduce (void* parameters_ref);
 
-    long long int reduceMatrix (long long int* array1, long long dimension, long long int num_threads);
+long long int thread_matrix_reduce (long long int* array1, int dimension, int num_threads);
 
 #endif

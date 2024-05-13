@@ -4,20 +4,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-    void show_thread_create_error (int thread);
+    void verify_thread_create (int thread);
 
-    void show_thread_join_error (int thread);
+    void verify_thread_join (int thread);
 
-    void show_error_size_allocation_memory (int obj);
+    void verify_allocation_memory_size (int obj);
 
-    void show_error_allocation_memory (void* obj);
+    void verify_allocation_memory (void* obj);
 
-    void show_error_open_file (FILE* file);
+    void verify_open_file (FILE* file);
 
-    void show_error_num_args (int argc);
+    void verify_num_args (int argc);
 
-    void show_error_numThreads_dimension (long long int num_threads, long long int dimension);
-
-    void show_error_convert_string_to_int (char* endPtr);
+    void verify_num_threads_dimension (int num_threads, int dimension);
 
 #endif

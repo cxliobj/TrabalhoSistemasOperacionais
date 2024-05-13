@@ -1,6 +1,6 @@
 #include "errorMessages.h"
 
-void show_thread_create_error (int thread)
+void verify_thread_create (int thread)
 {
     if (thread != 0)
     {
@@ -9,7 +9,7 @@ void show_thread_create_error (int thread)
     }
 }
 
-void show_thread_join_error (int thread)
+void verify_thread_join (int thread)
 {
     if (thread != 0)
     {
@@ -18,7 +18,7 @@ void show_thread_join_error (int thread)
     }
 }
 
-void show_error_size_allocation_memory (int obj)
+void verify_allocation_memory_size (int obj)
 {
     if (obj <= 0)
     {
@@ -27,7 +27,7 @@ void show_error_size_allocation_memory (int obj)
     }
 }
 
-void show_error_allocation_memory (void* obj)
+void verify_allocation_memory (void* obj)
 {
     if (obj == NULL)
     {
@@ -36,7 +36,7 @@ void show_error_allocation_memory (void* obj)
     }
 }
 
-void show_error_open_file (FILE* file)
+void verify_open_file (FILE* file)
 {
     if (file == NULL)
     { 
@@ -45,7 +45,7 @@ void show_error_open_file (FILE* file)
     }
 }
 
-void show_error_num_args (int argc)
+void verify_num_args (int argc)
 {
     if (argc != 8) 
     {
@@ -54,7 +54,7 @@ void show_error_num_args (int argc)
     }
 }
 
-void show_error_numThreads_dimension (long long int num_threads, long long int dimension)
+void verify_num_threads_dimension (int num_threads, int dimension)
 {
     if (num_threads <= 0)
     {
@@ -69,15 +69,6 @@ void show_error_numThreads_dimension (long long int num_threads, long long int d
     if (dimension % num_threads != 0)
     {
         printf("Number of threads is incompatible with the dimension number.\n");
-        exit(EXIT_FAILURE);
-    }
-}
-
-void show_error_convert_string_to_int (char* endPtr)
-{
-    if (*endPtr)
-    {
-        printf("Failed to convert string to int.\n");
         exit(EXIT_FAILURE);
     }
 }
