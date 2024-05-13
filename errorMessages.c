@@ -72,3 +72,12 @@ void show_error_numThreads_dimension (long long int num_threads, long long int d
         exit(EXIT_FAILURE);
     }
 }
+
+void show_error_convert_string_to_int (char* endPtr)
+{
+    if (*endPtr)
+    {
+        printf("Failed to convert string to int.\n");
+        exit(EXIT_FAILURE);
+    }
+}

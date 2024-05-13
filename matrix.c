@@ -1,6 +1,6 @@
 #include "matrix.h"
 
-void* threadtranscribeMatrix (void* parameters_ref)
+void* threadTranscribeMatrix (void* parameters_ref)
 {
     ThreadParameters* parameters = (ThreadParameters*) parameters_ref;
     register unsigned int i=0;
@@ -28,7 +28,7 @@ void transcribeMatrix (long long int* array1, FILE* fileArray, long long int dim
     parameters[0].dimension = dimension;
     parameters[0].fileArray = fileArray;
 
-    thread = pthread_create(&tids[0], NULL, threadtranscribeMatrix, (void*) &parameters[0]);
+    thread = pthread_create(&tids[0], NULL, threadTranscribeMatrix, (void*) &parameters[0]);
     show_thread_create_error(thread);
 
     thread = pthread_join(tids[0], NULL);
@@ -105,11 +105,11 @@ void sumMatrix (long long int* array1, long long int* array2, long long int* arr
     ThreadParameters* parameters = newThreadParameters(num_threads);
     pthread_t* tids = newThreadIDs(num_threads);
     
-    long long int quantElementos = (dimension * dimension) / num_threads;
+    register unsigned long long int numElements = (dimension * dimension) / num_threads;
     for (i = 0; i < num_threads; i++)
     {
-        parameters[i].idx_start = quantElementos * i;
-        parameters[i].idx_final = (quantElementos * (i+1));
+        parameters[i].idx_start = numElements * i;
+        parameters[i].idx_final = (numElements * (i+1));
         parameters[i].array1 = array1;
         parameters[i].array2 = array2;
         parameters[i].array3 = array3;
@@ -150,17 +150,17 @@ void* threadPartialMulti (void* parameters_ref)
     pthread_exit(NULL);
 }
 
-void multiplyMatrix(long long int* array1, long long int* array2, long long int* array3, long long dimension, long long int num_threads)
+void multiplyMatrix (long long int* array1, long long int* array2, long long int* array3, long long dimension, long long int num_threads)
 {
     register unsigned int i;
     ThreadParameters* parameters = newThreadParameters(num_threads);
     pthread_t* tids = newThreadIDs(num_threads);
     
-    long long int quantElementos = (dimension * dimension) / num_threads;
+    register unsigned long long int numElements = (dimension * dimension) / num_threads;
     for (i = 0; i < num_threads; i++)
     {
-        parameters[i].idx_start = quantElementos * i;
-        parameters[i].idx_final = (quantElementos * (i+1));
+        parameters[i].idx_start = numElements * i;
+        parameters[i].idx_final = (numElements * (i+1));
         parameters[i].array1 = array1;
         parameters[i].array2 = array2;
         parameters[i].array3 = array3;
@@ -206,11 +206,11 @@ long long int reduceMatrix (long long int* array1, long long dimension, long lon
     long long int sum = 0;
     long long int* partialSum = NULL;
     
-    long long int quantElementos = (dimension * dimension) / num_threads;
+    register unsigned long long int numElements = (dimension * dimension) / num_threads;
     for (i = 0; i < num_threads; i++)
     {
-        parameters[i].idx_start = quantElementos * i;
-        parameters[i].idx_final = (quantElementos * (i+1));
+        parameters[i].idx_start = numElements * i;
+        parameters[i].idx_final = (numElements * (i+1));
         parameters[i].array1 = array1;
         int thread = pthread_create(&tids[i], NULL, threadReduceMatrix, (void*) &parameters[i]);
         show_thread_create_error(thread);

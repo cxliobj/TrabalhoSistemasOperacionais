@@ -8,7 +8,7 @@
 #include "errorMessages.h"
 #include "resources.h"
 
-    void* threadtranscribeMatrix (void* parameters_ref);
+    void* threadTranscribeMatrix (void* parameters_ref);
 
     void transcribeMatrix (long long int* array1, FILE* fileArray, long long int dimension);
 

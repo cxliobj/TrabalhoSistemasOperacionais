@@ -18,4 +18,6 @@
 
     void show_error_numThreads_dimension (long long int num_threads, long long int dimension);
 
+    void show_error_convert_string_to_int (char* endPtr);
+
 #endif

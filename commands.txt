@@ -2,7 +2,7 @@ Compilation:
 
 gcc -Wall -pthread -o main ./errorMessages.c ./resources.c ./matrix.c ./main.c
 
-Executation: 
+Execution:
 
 - 1 thread
              
