@@ -19,8 +19,8 @@ void* matrix_transcribe (void* parameters_ref)
 
 void* init_transcribe (FILE* fileArray, long long int* array, int dimension, int num_threads)
 {
-    ThreadParameters* parameters = newThreadParameters(NUM_THREADS_LEITURA);
-    pthread_t* thread_ids = newThreadIDs(NUM_THREADS_LEITURA);
+    ThreadParameters* parameters = newThreadParameters(1);
+    pthread_t* thread_ids = newThreadIDs(1);
     parameters[0].fileArray = fileArray;
     parameters[0].array1 = array;
     parameters[0].dimension = dimension;
@@ -35,21 +35,6 @@ void* init_transcribe (FILE* fileArray, long long int* array, int dimension, int
     verify_thread_create(thread);
 
     return ((void*) thread_ids);
-}
-
-void end_transcribe (void* ptr, int num_threads)
-{
-    if (num_threads == 1)
-    {
-        free(ptr);
-        return ;
-    }
-    pthread_t* thread_ids = (pthread_t*) ptr;
-    ThreadParameters* parameters = newThreadParameters (NUM_THREADS_LEITURA);
-    int thread = pthread_join(thread_ids[0], (void**) &parameters[0]);
-    verify_thread_join(thread);
-    free(parameters);
-    free(thread_ids);
 }
 
 // ****************************************************************
@@ -94,21 +79,6 @@ void* init_write (FILE* fileArray, long long int* array, int dimension, int num_
     return ((void*) thread_ids);
 }
 
-void end_write (void* ptr, int num_threads)
-{
-    if (num_threads == 1)
-    {
-        free(ptr); 
-        return;
-    }
-    pthread_t* thread_ids = (pthread_t*) ptr;
-    ThreadParameters* parameters = newThreadParameters (NUM_THREADS_GRAVACAO);
-    int thread = pthread_join(thread_ids[0], (void**) &parameters[0]);
-    verify_thread_join(thread);
-    free(parameters);
-    free(thread_ids);
-}
-
 // ****************************************************************
 
 void* matrix_sum (void* parameters_ref)
@@ -125,12 +95,23 @@ void* matrix_sum (void* parameters_ref)
     {
         array3[i] = array1[i] + array2[i];
     }
-    pthread_exit(NULL);
+    return parameters;
 }
 
-void thread_matrix_sum (long long int* array1, long long int* array2, long long int* array3, int dimension, int num_threads)
+void* init_sum (long long int* array1, long long int* array2, long long int* array3, int dimension, int num_threads)
 {
     ThreadParameters* parameters = newThreadParameters(num_threads);
+
+    if (num_threads == 1)
+    {
+        parameters[0].array1 = array1;
+        parameters[0].array2 = array2;
+        parameters[0].array3 = array3;
+        parameters[0].idx_start = 0;
+        parameters[0].idx_final = dimension * dimension;
+        return matrix_sum((void*) &parameters[0]);
+    }
+
     pthread_t* thread_ids = newThreadIDs(num_threads);
     register unsigned int num_elements = (dimension * dimension) / num_threads;
     register unsigned int i;
@@ -146,14 +127,11 @@ void thread_matrix_sum (long long int* array1, long long int* array2, long long 
         int thread = pthread_create(&thread_ids[i], NULL, matrix_sum, (void*) &parameters[i]);
         verify_thread_create(thread);
     }
-    for (int i = 0; i < num_threads; i++)
-    {
-        int thread = pthread_join(thread_ids[i], NULL);
-        verify_thread_join(thread);
-    }
-    free(parameters);
-    free(thread_ids);
+
+    return ((void*) thread_ids);
 }
+
+// ****************************************************************
 
 void* matrix_multiplication (void* parameters_ref)
 {
@@ -174,12 +152,23 @@ void* matrix_multiplication (void* parameters_ref)
             array3[position(row, col, dimension)] += array1[position(row, j, dimension)] * array2[position(j, col, dimension)];
         }
     }
-    pthread_exit(NULL);
+    return parameters;
 }
 
-void thread_matrix_multiplication (long long int* array1, long long int* array2, long long int* array3, int dimension, int num_threads)
+void* init_multiplication (long long int* array1, long long int* array2, long long int* array3, int dimension, int num_threads)
 {
     ThreadParameters* parameters = newThreadParameters(num_threads);
+
+    if (num_threads == 1)
+    {
+        parameters[0].array1 = array1;
+        parameters[0].array2 = array2;
+        parameters[0].array3 = array3;
+        parameters[0].idx_start = 0;
+        parameters[0].idx_final = dimension * dimension;
+        return matrix_multiplication((void*) &parameters[0]);
+    }
+
     pthread_t* thread_ids = newThreadIDs(num_threads);
     register unsigned int num_elements = (dimension * dimension) / num_threads;
     register unsigned int i;
@@ -196,14 +185,11 @@ void thread_matrix_multiplication (long long int* array1, long long int* array2,
         int thread = pthread_create(&thread_ids[i], NULL, matrix_multiplication, (void*) &parameters[i]);
         verify_thread_create(thread);
     }
-    for (int i = 0; i < num_threads; i++)
-    {
-        int thread = pthread_join(thread_ids[i], NULL);
-        verify_thread_join(thread);
-    }
-    free(parameters);
-    free(thread_ids);
+
+    return ((void*) thread_ids);
 }
+
+// ****************************************************************
 
 void* matrix_reduce (void* parameters_ref)
 {
@@ -222,18 +208,25 @@ void* matrix_reduce (void* parameters_ref)
     long long int* answer = malloc(sizeof(answer));
     verify_allocation_memory(answer);
     *answer = sum;
-    pthread_exit(answer);
+    return answer;
 }
 
-long long int thread_matrix_reduce (long long int* array1, int dimension, int num_threads)
+void* init_reduce (long long int* array1, int dimension, int num_threads)
 {
     ThreadParameters* parameters = newThreadParameters(num_threads);
+
+    if (num_threads == 1)
+    {
+        parameters[0].array1 = array1;
+        parameters[0].idx_start = 0;
+        parameters[0].idx_final = dimension * dimension;
+        return matrix_reduce((void*) &parameters[0]);
+    }
+
     pthread_t* thread_ids = newThreadIDs(num_threads);
-    long long int* partialSum = NULL;
-    long long int sum = 0;
-    register unsigned int i;
-    
     register unsigned int num_elements = (dimension * dimension) / num_threads;
+    register unsigned int i;
+
     for (i = 0; i < num_threads; i++)
     {
         parameters[i].array1 = array1;
@@ -243,6 +236,59 @@ long long int thread_matrix_reduce (long long int* array1, int dimension, int nu
         int thread = pthread_create(&thread_ids[i], NULL, matrix_reduce, (void*) &parameters[i]);
         verify_thread_create(thread);
     }
+
+    return ((void*) thread_ids);
+}
+
+// ****************************************************************
+
+void end_1 (void* ptr, int num_threads)
+{
+    if (num_threads == 1)
+    {
+        free(ptr);
+        return ;
+    }
+    pthread_t* thread_ids = (pthread_t*) ptr;
+    ThreadParameters* parameters = newThreadParameters (1);
+    int thread = pthread_join(thread_ids[0], (void**) &parameters[0]);
+    verify_thread_join(thread);
+    free(parameters);
+    free(thread_ids);
+}
+
+void end_2 (void* ptr, int num_threads)
+{
+    if (num_threads == 1)
+    {
+        free(ptr);
+        return ;
+    }
+    pthread_t* thread_ids = (pthread_t*) ptr;
+    ThreadParameters* parameters = newThreadParameters (num_threads);
+
+    for (int i = 0; i < num_threads; i++)
+    {
+        int thread = pthread_join(thread_ids[i], (void**) &parameters[i]);
+        verify_thread_join(thread);
+    }
+    free(parameters);
+    free(thread_ids);
+}
+
+long long int end_3 (void* ptr, int num_threads)
+{
+    long long int sum = 0;
+    if (num_threads == 1)
+    {
+        sum = *(long long int*) ptr;
+        return sum;
+    }
+
+    pthread_t* thread_ids = (pthread_t*) ptr;
+    ThreadParameters* parameters = newThreadParameters (num_threads);
+    long long int* partialSum = NULL;
+
     for (int i = 0; i < num_threads; i++)
     {
         int thread = pthread_join(thread_ids[i], (void**) &partialSum);
