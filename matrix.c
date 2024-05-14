@@ -14,26 +14,45 @@ void* matrix_transcribe (void* parameters_ref)
         i++;
     }
     fclose(fileArray);
-    pthread_exit(parameters);
+    return parameters;
 }
 
-void thread_matrix_transcribe (FILE* fileArray, long long int* array, int dimension)
+void* init_transcribe (FILE* fileArray, long long int* array, int dimension, int num_threads)
 {
-    ThreadParameters* parameters = newThreadParameters(1);
-    pthread_t* thread_ids = newThreadIDs(1);
+    ThreadParameters* parameters = newThreadParameters(NUM_THREADS_LEITURA);
+    pthread_t* thread_ids = newThreadIDs(NUM_THREADS_LEITURA);
     parameters[0].fileArray = fileArray;
     parameters[0].array1 = array;
     parameters[0].dimension = dimension;
 
+    if (num_threads == 1)
+    {   
+        free(thread_ids);
+        return matrix_transcribe((void*) &parameters[0]);
+    }
+
     int thread = pthread_create(&thread_ids[0], NULL, matrix_transcribe, (void*) &parameters[0]);
     verify_thread_create(thread);
 
-    thread = pthread_join(thread_ids[0], NULL);
-    verify_thread_join(thread);
+    return ((void*) thread_ids);
+}
 
+void end_transcribe (void* ptr, int num_threads)
+{
+    if (num_threads == 1)
+    {
+        free(ptr);
+        return ;
+    }
+    pthread_t* thread_ids = (pthread_t*) ptr;
+    ThreadParameters* parameters = newThreadParameters (NUM_THREADS_LEITURA);
+    int thread = pthread_join(thread_ids[0], (void**) &parameters[0]);
+    verify_thread_join(thread);
     free(parameters);
     free(thread_ids);
 }
+
+// ****************************************************************
 
 void* matrix_write (void* parameters_ref)
 {
@@ -52,26 +71,45 @@ void* matrix_write (void* parameters_ref)
         fprintf(fileArray, "\n");
     }
     fclose(fileArray);
-    pthread_exit(NULL);
+    return parameters;
 }
 
-void thread_matrix_write (FILE* fileArray, long long int* array, int dimension)
+void* init_write (FILE* fileArray, long long int* array, int dimension, int num_threads)
 {
     ThreadParameters* parameters = newThreadParameters(1);
     pthread_t* thread_ids = newThreadIDs(1);
     parameters[0].fileArray = fileArray;
     parameters[0].array1 = array;
     parameters[0].dimension = dimension;
-    
+
+    if (num_threads == 1)
+    {
+        free(thread_ids);
+        return matrix_write((void*) &parameters[0]);
+    }
+
     int thread = pthread_create(&thread_ids[0], NULL, matrix_write, (void*) &parameters[0]);
     verify_thread_create(thread);
 
-    thread = pthread_join(thread_ids[0], NULL);
-    verify_thread_join(thread);
+    return ((void*) thread_ids);
+}
 
+void end_write (void* ptr, int num_threads)
+{
+    if (num_threads == 1)
+    {
+        free(ptr); 
+        return;
+    }
+    pthread_t* thread_ids = (pthread_t*) ptr;
+    ThreadParameters* parameters = newThreadParameters (NUM_THREADS_GRAVACAO);
+    int thread = pthread_join(thread_ids[0], (void**) &parameters[0]);
+    verify_thread_join(thread);
     free(parameters);
     free(thread_ids);
 }
+
+// ****************************************************************
 
 void* matrix_sum (void* parameters_ref)
 {

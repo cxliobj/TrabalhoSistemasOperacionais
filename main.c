@@ -32,8 +32,10 @@ int main(int argc, char** argv)
     PASSO 1: Leitura da Matriz A // Leitura da Matriz B (2 threads Tl)
     */
 
-    thread_matrix_transcribe (file[0], matrix[0], dimension);
-    thread_matrix_transcribe (file[1], matrix[1], dimension);
+    void* thread1_transcribe = init_transcribe (file[0], matrix[0], dimension, num_threads);
+    void* thread2_transcribe = init_transcribe (file[1], matrix[1], dimension, num_threads);
+    end_transcribe(thread1_transcribe, num_threads);
+    end_transcribe(thread2_transcribe, num_threads);
 
     /*
     PASSO 2: Soma das Matrizes A + B = D (T threads Tp)
@@ -49,10 +51,13 @@ int main(int argc, char** argv)
     PASSO 3 // PASSO 4: Gravação da Matriz D // Leitura da Matriz C (1 thread Te e 1 thread Tl)
     */
 
-    thread_matrix_write (file[3], matrix[3], dimension);
+    void* thread1_write = init_write (file[3], matrix[3], dimension, num_threads);
 
-    thread_matrix_transcribe (file[2], matrix[2], dimension);
+    end_write(thread1_write, num_threads);
 
+    void* thread3_transcribe = init_transcribe (file[2], matrix[2], dimension, num_threads);
+
+    end_transcribe(thread3_transcribe, num_threads);
     /*
     PASSO 5: Multiplicação das Matrizes D x C = E (T threads Tp)
     */
@@ -67,7 +72,9 @@ int main(int argc, char** argv)
     PASSO 6 // PASSO 7: Gravação da Matriz E // Redução da Matriz E (1 thread Te e T threads Tp)
     */
 
-    thread_matrix_write (file[4], matrix[4], dimension);
+    void* thread2_write = init_write (file[4], matrix[4], dimension, num_threads);
+
+    end_write(thread2_write, num_threads);
 
     clock_t start_reduction = clock();
 
