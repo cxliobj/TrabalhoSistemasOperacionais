@@ -7,9 +7,15 @@
 #include <errno.h>
 #include "errorMessages.h"
 
-    typedef struct ThreadParameters
+    typedef struct Matrix
     {
         FILE* fileArray;
+        long long int* array;
+        int dimension;
+    } Matrix;
+
+    typedef struct ThreadParameters
+    {
         long long int* array1;
         long long int* array2;
         long long int* array3;
@@ -18,14 +24,16 @@
         int idx_final;
     } ThreadParameters;
 
+    int stringToInt(char* argv);
+    
+    FILE* openFile(char* file_name);
+    
+    long long int* newArray(int dimension);
+    
+    Matrix* newMatrix(char* file_name, int dimension);
+
     pthread_t* newThreadIDs(int num_threads);
 
-    ThreadParameters* newThreadParameters (int num_threads);
-
-    long long int* newMatrix (long long int dimension);
-
-    FILE* openFile(char* argv_file_matrix);
-
-    int stringToInt (char* argv);
+    ThreadParameters* newThreadParameters(int num_threads);
 
 #endif

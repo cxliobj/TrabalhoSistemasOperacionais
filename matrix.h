@@ -8,40 +8,29 @@
 #include "errorMessages.h"
 #include "resources.h"
 
-void* matrix_transcribe (void* parameters_ref);
+/**
+ *  Item por item e lido no arquivo e guardado na respectiva matrix alocada dinamicamente, ate que se encontre um EOF 
+**/
+void* matrix_transcribe(void* parameters_ref);
 
-void* init_transcribe (FILE* fileArray, long long int* array1, int dimension, int num_threads);
+/**
+ *  Item por item e lido no arquivo e guardado na respectiva matrix alocada dinamicamente, ate que se encontre um EOF 
+**/
+void* matrix_write(void* parameters_ref);
 
-// ****************************************************************
+/** 
+ * A soma e feita pelo algoritmo classico: cada item no indice "i" das repectivas matrizes sao somados e o resultado e guardado numa terceira matriz 
+**/
+void* matrix_sum(void* parameters_ref);
 
-void* matrix_write (void* parameters_ref);
+void* matrix_multiplication(void* parameters_ref);
 
-void* init_write (FILE* fileArray, long long int* array1, int dimension, int num_threads);
+void* matrix_reduce(void* parameters_ref);
 
-// ****************************************************************
+void sum(Matrix** matrix, int dimension, int num_threads);
 
-void* matrix_sum (void* parameters_ref);
+void multiply(Matrix** matrix, int dimension, int num_threads);
 
-void* init_sum (long long int* array1, long long int* array2, long long int* array3, int dimension, int num_threads);
-
-// ****************************************************************
-
-void* matrix_multiplication (void* parameters_ref);
-
-void* init_multiplication (long long int* array1, long long int* array2, long long int* array3, int dimension, int num_threads);
-
-// ****************************************************************
-
-void* matrix_reduce (void* parameters_ref);
-
-void* init_reduce (long long int* array1, int dimension, int num_threads);
-
-// ****************************************************************
-
-void end_1 (void* ptr, int num_threads);
-
-void end_2 (void* ptr, int num_threads);
-
-long long int end_3 (void* ptr, int num_threads);
+long long int reduce(Matrix** matrix, int dimension, int num_threads);
 
 #endif
