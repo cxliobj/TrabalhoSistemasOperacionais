@@ -27,10 +27,4 @@ void* matrix_multiplication(void* parameters_ref);
 
 void* matrix_reduce(void* parameters_ref);
 
-void sum(Matrix** matrix, int dimension, int num_threads);
-
-void multiply(Matrix** matrix, int dimension, int num_threads);
-
-long long int reduce(Matrix** matrix, int dimension, int num_threads);
-
 #endif

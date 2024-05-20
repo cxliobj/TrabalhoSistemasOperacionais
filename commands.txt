@@ -1,6 +1,6 @@
 Compilation: 
 
-gcc -Wall -pthread -o main ./errorMessages.c ./resources.c ./matrix.c ./main.c
+gcc -Wall -pthread -o main ./errorMessages.c ./resources.c ./matrix.c ./threads.c ./main.c
 
 Execution:
 

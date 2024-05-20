@@ -5,6 +5,7 @@
 #include "errorMessages.h"
 #include "resources.h"
 #include "matrix.h"
+#include "threads.h"
 
 int main(int argc, char** argv)
 {
