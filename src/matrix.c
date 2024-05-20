@@ -1,4 +1,4 @@
-#include "matrix.h"
+#include "../include/matrix.h"
 
 void* matrix_transcribe(void* parameters_ref)
 {

@@ -12,9 +12,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include "errorMessages.h"
-#include "resources.h"
-#include "matrix.h"
+#include "../include/errorMessages.h"
+#include "../include/resources.h"
+#include "../include/matrix.h"
 
 void sum(Matrix** matrix, int dimension, int num_threads);
 

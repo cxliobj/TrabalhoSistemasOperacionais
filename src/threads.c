@@ -1,4 +1,4 @@
-#include "threads.h"
+#include "../include/threads.h"
 
 void sum(Matrix** matrix, int dimension, int num_threads)
 {
@@ -29,7 +29,7 @@ void sum(Matrix** matrix, int dimension, int num_threads)
     }
 
     pthread_t* thread_ids = newThreadIDs(num_threads);
-    register unsigned int i;
+    register int i;
 
     // Inicio das threads de leitura das matrizes A e B
     for (i = 0; i < 2; i++)
@@ -100,7 +100,7 @@ void multiply(Matrix** matrix, int dimension, int num_threads)
     }
 
     pthread_t* thread_ids = newThreadIDs(num_threads);
-    register unsigned int i;
+    register int i;
 
     // Gravcao da matriz D
     int thread = pthread_create(&thread_ids[0], NULL, matrix_write, (void*) matrix_D);
@@ -166,7 +166,7 @@ long long int reduce(Matrix** matrix, int dimension, int num_threads)
     long long int sum = 0;
     pthread_t* thread_ids = newThreadIDs(num_threads+1);
     register unsigned int num_elements = (dimension * dimension) / num_threads;
-    register unsigned int i;
+    register int i;
 
     // Inicio da thread de gravacao da matriz E
     int thread = pthread_create(&thread_ids[num_threads], NULL, matrix_write, (void*) matrix_E);

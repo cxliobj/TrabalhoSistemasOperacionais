@@ -1,4 +1,4 @@
-#include "resources.h"
+#include "../include/resources.h"
 
 int stringToInt(char* str) 
 {

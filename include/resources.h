@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <errno.h>
-#include "errorMessages.h"
+#include "../include/errorMessages.h"
 
     typedef struct Matrix
     {

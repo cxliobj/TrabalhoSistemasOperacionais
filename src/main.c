@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <time.h>
-#include "errorMessages.h"
-#include "resources.h"
-#include "matrix.h"
-#include "threads.h"
+#include "../include/errorMessages.h"
+#include "../include/resources.h"
+#include "../include/matrix.h"
+#include "../include/threads.h"
 
 int main(int argc, char** argv)
 {
