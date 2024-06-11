@@ -54,7 +54,7 @@ pthread_t* newThreadIDs(int num_threads)
     return threadIDs;
 }
 
-ThreadParameters* newThreadParameters(int num_threads)
+ThreadParameters* newParameters(int num_threads)
 {
     verify_allocation_memory_size(num_threads);
     ThreadParameters* parameters = (ThreadParameters*) malloc(num_threads * sizeof(ThreadParameters));

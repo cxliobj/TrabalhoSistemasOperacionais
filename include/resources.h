@@ -1,5 +1,5 @@
-#ifndef RESOURCES_HPP
-#define RESOURCES_HPP
+#ifndef RESOURCES_H
+#define RESOURCES_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,6 +34,6 @@
 
     pthread_t* newThreadIDs(int num_threads);
 
-    ThreadParameters* newThreadParameters(int num_threads);
+    ThreadParameters* newParameters(int num_threads);
 
 #endif

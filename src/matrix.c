@@ -47,7 +47,6 @@ void* matrix_sum(void* parameters_ref)
     register unsigned int final = parameters->idx_final;
     register unsigned int i;
 
-
     for (i = start; i < final; i++)
     {
         array3[i] = array1[i] + array2[i];
@@ -90,7 +89,6 @@ void* matrix_reduce(void* parameters_ref)
     {
         sum += array[i];
     }
-
     long long int* answer = malloc(sizeof(answer));
     verify_allocation_memory(answer);
     *answer = sum;

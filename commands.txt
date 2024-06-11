@@ -1,35 +1,29 @@
-Compilation: 
+Compilation:
 
-gcc -Wall -pthread -o main ./src/errorMessages.c ./src/resources.c ./src/matrix.c ./src/threads.c ./src/main.c
-
-gcc -W -Werror -O2 -pthread -o main ./src/errorMessages.c ./src/resources.c ./src/matrix.c ./src/threads.c ./src/main.c
-
-gcc -W -Werror -O3 -pthread -o main ./src/errorMessages.c ./src/resources.c ./src/matrix.c ./src/threads.c ./src/main.c
-
-gcc -W -Werror -Ofast -pthread -o main ./src/errorMessages.c ./src/resources.c ./src/matrix.c ./src/threads.c ./src/main.c
+gcc -W -Werror -pthread -O3 -o main ./src/*.c
 
 Execution:
 
 - 1 thread
              
-./main 1 100 ./teste100/matrixA100.txt ./teste100/matrixB100.txt ./teste100/matrixC100.txt ./teste100/matrixD100.txt ./teste100/matrixE100.txt > output100_1.txt
+./main 1 100 ./teste100/*.txt > ./out/output100_1.txt
 
-./main 1 1000 ./teste1k/matrixA1k.txt ./teste1k/matrixB1k.txt ./teste1k/matrixC1k.txt ./teste1k/matrixD1k.txt ./teste1k/matrixE1k.txt > output1k_1.txt
+./main 1 1000 ./teste1k/*.txt > ./out/output1k_1.txt
 
-./main 1 2000 ./teste2k/matrixA2k.txt ./teste2k/matrixB2k.txt ./teste2k/matrixC2k.txt ./teste2k/matrixD2k.txt ./teste2k/matrixE2k.txt > output2k_1.txt
+./main 1 2000 ./teste2k/*.txt > ./out/output2k_1.txt
 
 - 2 threads
 
-./main 2 100 ./teste100/matrixA100.txt ./teste100/matrixB100.txt ./teste100/matrixC100.txt ./teste100/matrixD100.txt ./teste100/matrixE100.txt > output100_2.txt
+./main 2 100 ./teste100/*.txt > ./out/output100_2.txt
 
-./main 2 1000 ./teste1k/matrixA1k.txt ./teste1k/matrixB1k.txt ./teste1k/matrixC1k.txt ./teste1k/matrixD1k.txt ./teste1k/matrixE1k.txt > output1k_2.txt
+./main 2 1000 ./teste1k/*.txt > ./out/output1k_2.txt
 
-./main 2 2000 ./teste2k/matrixA2k.txt ./teste2k/matrixB2k.txt ./teste2k/matrixC2k.txt ./teste2k/matrixD2k.txt ./teste2k/matrixE2k.txt > output2k_4.txt
+./main 2 2000 ./teste2k/*.txt > ./out/output2k_4.txt
 
 - 4 threads
 
-./main 4 100 ./teste100/matrixA100.txt ./teste100/matrixB100.txt ./teste100/matrixC100.txt ./teste100/matrixD100.txt ./teste100/matrixE100.txt > output100_4.txt
+./main 4 100 ./teste100/*.txt > ./out/output100_4.txt
 
-./main 4 1000 ./teste1k/matrixA1k.txt ./teste1k/matrixB1k.txt ./teste1k/matrixC1k.txt ./teste1k/matrixD1k.txt ./teste1k/matrixE1k.txt > output1k_4.txt
+./main 4 1000 ./teste1k/*.txt > ./out/output1k_4.txt
 
-./main 4 2000 ./teste2k/matrixA2k.txt ./teste2k/matrixB2k.txt ./teste2k/matrixC2k.txt ./teste2k/matrixD2k.txt ./teste2k/matrixE2k.txt > output2k_4.txt
+./main 4 2000 ./teste2k/*.txt > ./out/output2k_4.txt

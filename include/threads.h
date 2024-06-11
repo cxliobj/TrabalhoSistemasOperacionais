@@ -1,5 +1,5 @@
-#ifndef THREADS_HPP
-#define THREADS_HPP
+#ifndef THREADS_H
+#define THREADS_H
 
 /**
  * MatrizA: matriz[0] 
@@ -16,7 +16,11 @@
 #include "../include/resources.h"
 #include "../include/matrix.h"
 
+void passo_1 (Matrix** matrix, int dimension, int num_threads); //nome temporario
+
 void sum(Matrix** matrix, int dimension, int num_threads);
+
+void passo_3 (Matrix** matrix, int dimension, int num_threads); //nome temporario
 
 void multiply(Matrix** matrix, int dimension, int num_threads);
 

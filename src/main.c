@@ -27,6 +27,10 @@ int main(int argc, char** argv)
 
     clock_t start_global = clock();
 
+/*** LEITURA MATRIZ A // LEITURA MATRIZ B ***************************************** ***/
+
+    passo_1(matrix, dimension, num_threads);
+
 /*** SOMA ************************************************************************* ***/
 
     clock_t start_sum = clock();
@@ -34,6 +38,10 @@ int main(int argc, char** argv)
     sum(matrix, dimension, num_threads);
 
     clock_t end_sum = clock() - start_sum;
+
+/*** GRAVAÇÃO MATRIZ D // LEITURA MATRIZ C ***************************************** ***/
+
+    passo_3(matrix, dimension, num_threads);
 
 /*** MULTIPLICATION *************************************************************** ***/
 
@@ -57,10 +65,10 @@ int main(int argc, char** argv)
 
 /*** PRINTING DATA **************************************************************** ***/
 
-    double total_time_sum = ((double) end_sum) / CLOCKS_PER_SEC;
-    double total_time_multiplication = ((double) end_multiplication) / CLOCKS_PER_SEC;
-    double total_time_reduction = ((double) end_reduction) / CLOCKS_PER_SEC;
-    double total_time_global = ((double) end_global) / CLOCKS_PER_SEC;
+    double total_time_sum = (((double) end_sum) / num_threads) / CLOCKS_PER_SEC;
+    double total_time_multiplication = (((double) end_multiplication) / num_threads) / CLOCKS_PER_SEC;
+    double total_time_reduction = (((double) end_reduction) / num_threads) / CLOCKS_PER_SEC;
+    double total_time_global = (((double) end_global) / num_threads) / CLOCKS_PER_SEC;
 
     printf("Reducao: %lld.\n", reduction);
     printf("Tempo soma: %lf segundos.\n", total_time_sum);
