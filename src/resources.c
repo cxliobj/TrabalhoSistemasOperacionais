@@ -23,7 +23,7 @@ int stringToInt(char* str)
 FILE* openFile(char* file_name)
 {
     FILE* file = fopen(file_name, "r+");
-    verify_open_file(file);
+    verify_open_file(file, file_name);
     return file;
 }
 

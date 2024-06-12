@@ -208,7 +208,7 @@ long long int reduce(Matrix** matrix, int dimension, int num_threads)
             verify_thread_create(err);
         }
 
-        // Esperando a thread de garvação
+        // Esperando a thread de gravação
         err = pthread_join(thread_ids[num_threads], NULL);
         verify_thread_join(err);
 

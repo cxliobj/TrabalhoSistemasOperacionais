@@ -1,19 +1,19 @@
 #include "../include/errorMessages.h"
 
-void verify_thread_create(int thread)
+void verify_thread_create(int err)
 {
-    if (thread != 0)
+    if (err != 0)
     {
-        printf("Thread create failed.\n");
+        fprintf(stderr, "Thread create failed.\n");
         exit(EXIT_FAILURE);
     }
 }
 
-void verify_thread_join(int thread)
+void verify_thread_join(int err)
 {
-    if (thread != 0)
+    if (err != 0)
     {
-        printf("Thread join failed.\n");
+        fprintf(stderr, "Thread join failed.\n");
         exit(EXIT_FAILURE);
     }
 }
@@ -22,7 +22,7 @@ void verify_allocation_memory_size(int obj)
 {
     if (obj <= 0)
     {
-        printf("Incompatible size to allocate memory.\n");
+        fprintf(stderr, "Incompatible size to allocate memory.\n");
         exit(EXIT_FAILURE);
     }
 }
@@ -31,16 +31,16 @@ void verify_allocation_memory(void* obj)
 {
     if (obj == NULL)
     {
-        printf("Failed to allocate memory.\n");
+        fprintf(stderr, "Failed to allocate memory.\n");
         exit(EXIT_FAILURE);
     }
 }
 
-void verify_open_file(FILE* file)
+void verify_open_file(FILE* file, char* file_name)
 {
     if (file == NULL)
-    { 
-        printf("Failed to open some file.\n"); 
+    {
+        fprintf(stderr, "Failed to open %s file.\n", file_name);
         exit(EXIT_FAILURE); 
     }
 }
@@ -49,26 +49,25 @@ void verify_num_args(int argc)
 {
     if (argc != 8) 
     {
-        printf("Invalid arguments quantity.\n");
+        fprintf(stderr, "Invalid number of arguments\n");
         exit(EXIT_FAILURE);
     }
 }
 
-void verify_num_threads_dimension(int num_threads, int dimension)
+void verify_num_threads(int num_threads)
 {
-    if (num_threads <= 0 || num_threads > 4)
+    if (num_threads <= 0 || num_threads == 3 || num_threads > 4)
     {
-        printf("Invalid threads number.\n");
+        fprintf(stderr, "Invalid number of threads.\n");
         exit(EXIT_FAILURE);
     }
+}
+
+void verify_num_dimension(int dimension)
+{
     if (dimension <= 0)
     {
-       printf("Invalid dimension number.\n");
+        fprintf(stderr, "Invalid dimension number.\n");
         exit(EXIT_FAILURE); 
-    }
-    if (dimension % num_threads != 0)
-    {
-        printf("Number of threads is incompatible with the dimension number.\n");
-        exit(EXIT_FAILURE);
     }
 }

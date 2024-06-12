@@ -1,6 +1,6 @@
 PROGRAM = app.exe
 CODEDIRS = src
-INCDIRS = include
+INCDIRS =. ./include
 BINDIR = bin
 OUTDIR = out
 TEST_100_DIR = teste100
@@ -9,7 +9,6 @@ TEST_2K_DIR = teste2k
 
 CC = gcc
 OPT = -O3
-
 DEPFLAGS = -MP -MD
 CFLAGS = -Wall -Wextra -g $(foreach D, $(INCDIRS), -I$(D)) $(OPT) $(DEPFLAGS) 
 
@@ -58,7 +57,7 @@ $(PROGRAM): $(OBJECTS)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm -rf $(BINDIR) $(OUTDIR)
+	rm -rf $(BINDIR) $(OUTDIR) $(BINARY) $(OBJECTS) $(DEPFILES) $(PROGRAM)
 
 clean-out:
 	rm -rf $(OUTDIR)/*

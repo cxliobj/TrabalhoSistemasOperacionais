@@ -14,8 +14,10 @@ int main(int argc, char** argv)
 /*** DECLARATIONS ***************************************************************** ***/
 
     int num_threads = (int) stringToInt(argv[1]);
+    verify_num_threads(num_threads);
+    
     int dimension = (int) stringToInt(argv[2]);
-    verify_num_threads_dimension(num_threads, dimension);
+    verify_num_dimension(dimension);
 
     Matrix* matrix[5];
     for (int i = 0; i < 5; i++)
