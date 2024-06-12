@@ -16,11 +16,11 @@
 #include "../include/resources.h"
 #include "../include/matrix.h"
 
-void passo_1 (Matrix** matrix, int dimension, int num_threads); //nome temporario
+void passo_1 (Matrix** matrix, int num_threads); //nome temporario
 
 void sum(Matrix** matrix, int dimension, int num_threads);
 
-void passo_3 (Matrix** matrix, int dimension, int num_threads); //nome temporario
+void passo_3 (Matrix** matrix, int num_threads); //nome temporario
 
 void multiply(Matrix** matrix, int dimension, int num_threads);
 

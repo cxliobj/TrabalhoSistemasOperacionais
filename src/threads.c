@@ -1,6 +1,6 @@
 #include "../include/threads.h"
 
-void passo_1 (Matrix** matrix, int dimension, int num_threads)
+void passo_1 (Matrix** matrix, int num_threads)
 {
     Matrix* matrix_A = matrix[0];
     Matrix* matrix_B = matrix[1];
@@ -85,7 +85,7 @@ void sum(Matrix** matrix, int dimension, int num_threads)
     }
 }
 
-void passo_3 (Matrix** matrix, int dimension, int num_threads)
+void passo_3 (Matrix** matrix, int num_threads)
 {
     Matrix* matrix_C = matrix[2];
     Matrix* matrix_D = matrix[3];

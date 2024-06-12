@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 
 /*** LEITURA MATRIZ A // LEITURA MATRIZ B ***************************************** ***/
 
-    passo_1(matrix, dimension, num_threads);
+    passo_1(matrix, num_threads);
 
 /*** SOMA ************************************************************************* ***/
 
@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 
 /*** GRAVAÇÃO MATRIZ D // LEITURA MATRIZ C ***************************************** ***/
 
-    passo_3(matrix, dimension, num_threads);
+    passo_3(matrix, num_threads);
 
 /*** MULTIPLICATION *************************************************************** ***/
 
