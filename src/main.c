@@ -6,6 +6,7 @@
 #include "../include/resources.h"
 #include "../include/matrix.h"
 #include "../include/threads.h"
+#define _POSIX_C_SOURCE 199309L
 
 struct timespec start_sum, finish_sum;
 struct timespec start_mult, finish_mult;
