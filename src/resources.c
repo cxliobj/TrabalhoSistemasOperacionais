@@ -11,12 +11,10 @@ int stringToInt(char* str)
         perror("strtol");
         exit(EXIT_FAILURE);
     }
-
     if (endptr == str) {
         fprintf(stderr, "No digits were found\n");
         exit(EXIT_FAILURE);
     }
-
     return ((int) number);
 }
 

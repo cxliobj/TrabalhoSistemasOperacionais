@@ -7,6 +7,15 @@
 #include "../include/matrix.h"
 #include "../include/threads.h"
 
+struct timespec start_sum, finish_sum;
+struct timespec start_mult, finish_mult;
+struct timespec start_reduc, finish_reduc;
+
+double global_elapsed;
+double sum_elapsed;
+double mult_elapsed;
+double reduc_elapsed;
+
 int main(int argc, char** argv)
 {
     verify_num_args(argc);
@@ -17,42 +26,44 @@ int main(int argc, char** argv)
     int dimension = stringToInt(argv[2]);
     verify_num_dimension(dimension);
 
-    Matrix* matrix[5];
+    Matrix** matrix = (Matrix**) malloc(5 * sizeof(Matrix*));
     for (int i = 0; i < 5; i++)
     {
         matrix[i] = newMatrix(argv[i+3], dimension);
     }
 
-    clock_t start_global = clock();
-    
     transcribe_A_and_B(matrix, num_threads);
 
-    clock_t start_sum = clock();
+    clock_gettime(CLOCK_MONOTONIC, &start_sum);
     sum(matrix, dimension, num_threads);
-    clock_t end_sum = clock() - start_sum;
+    clock_gettime(CLOCK_MONOTONIC, &finish_sum);
 
     write_D_transcribe_C(matrix, num_threads);
 
-    clock_t start_multiplication = clock();
+    clock_gettime(CLOCK_MONOTONIC, &start_mult);
     multiply(matrix, dimension, num_threads);
-    clock_t end_multiplication = clock() - start_multiplication;
+    clock_gettime(CLOCK_MONOTONIC, &finish_mult);
 
-    clock_t start_reduction = clock();
+    clock_gettime(CLOCK_MONOTONIC, &start_reduc);
     long long int reduction = reduce(matrix, dimension, num_threads);
-    clock_t end_reduction = clock() - start_reduction;
+    clock_gettime(CLOCK_MONOTONIC, &finish_reduc);
+    
+    sum_elapsed = (finish_sum.tv_sec - start_sum.tv_sec);
+    sum_elapsed += (finish_sum.tv_nsec - start_sum.tv_nsec) / 1000000000.0;
 
-    clock_t end_global = clock() - start_global;
+    mult_elapsed = (finish_mult.tv_sec - start_mult.tv_sec);
+    mult_elapsed += (finish_mult.tv_nsec - start_mult.tv_nsec) / 1000000000.0;
 
-    double total_time_sum = (((double) end_sum) / num_threads) / CLOCKS_PER_SEC;
-    double total_time_multiplication = (((double) end_multiplication) / num_threads) / CLOCKS_PER_SEC;
-    double total_time_reduction = (((double) end_reduction) / num_threads) / CLOCKS_PER_SEC;
-    double total_time_global = (((double) end_global) / num_threads) / CLOCKS_PER_SEC;
+    reduc_elapsed = (finish_reduc.tv_sec - start_reduc.tv_sec);
+    reduc_elapsed += (finish_reduc.tv_nsec - start_reduc.tv_nsec) / 1000000000.0;
+
+    global_elapsed = sum_elapsed + mult_elapsed + reduc_elapsed;
 
     printf("Reducao: %lld.\n", reduction);
-    printf("Tempo soma: %lf segundos.\n", total_time_sum);
-    printf("Tempo multiplicacao: %lf segundos.\n", total_time_multiplication);
-    printf("Tempo reducao: %lf segundos.\n", total_time_reduction);
-    printf("Tempo total: %lf segundos.\n", total_time_global);
+    printf("Tempo soma: %lf segundos.\n", sum_elapsed);
+    printf("Tempo multiplicacao: %lf segundos.\n", mult_elapsed);
+    printf("Tempo reducao: %lf segundos.\n", reduc_elapsed);
+    printf("Tempo total: %lf segundos.\n", global_elapsed);
 
     return 0;
 }
