@@ -11,12 +11,10 @@ int main(int argc, char** argv)
 {
     verify_num_args(argc);
 
-/*** DECLARATIONS ***************************************************************** ***/
-
-    int num_threads = (int) stringToInt(argv[1]);
+    int num_threads = stringToInt(argv[1]);
     verify_num_threads(num_threads);
     
-    int dimension = (int) stringToInt(argv[2]);
+    int dimension = stringToInt(argv[2]);
     verify_num_dimension(dimension);
 
     Matrix* matrix[5];
@@ -25,47 +23,25 @@ int main(int argc, char** argv)
         matrix[i] = newMatrix(argv[i+3], dimension);
     }
 
-/*** START ************************************************************************ ***/
-
     clock_t start_global = clock();
-
-/*** LEITURA MATRIZ A // LEITURA MATRIZ B ***************************************** ***/
-
-    passo_1(matrix, num_threads);
-
-/*** SOMA ************************************************************************* ***/
+    
+    transcribe_A_and_B(matrix, num_threads);
 
     clock_t start_sum = clock();
-    
     sum(matrix, dimension, num_threads);
-
     clock_t end_sum = clock() - start_sum;
 
-/*** GRAVAÇÃO MATRIZ D // LEITURA MATRIZ C ***************************************** ***/
-
-    passo_3(matrix, num_threads);
-
-/*** MULTIPLICATION *************************************************************** ***/
+    write_D_transcribe_C(matrix, num_threads);
 
     clock_t start_multiplication = clock();
-    
     multiply(matrix, dimension, num_threads);
-    
     clock_t end_multiplication = clock() - start_multiplication;
 
-/*** REDUCTION ******************************************************************** ***/
-
     clock_t start_reduction = clock();
-
     long long int reduction = reduce(matrix, dimension, num_threads);
-
     clock_t end_reduction = clock() - start_reduction;
-    
-/*** FINAL ************************************************************************ ***/
 
     clock_t end_global = clock() - start_global;
-
-/*** PRINTING DATA **************************************************************** ***/
 
     double total_time_sum = (((double) end_sum) / num_threads) / CLOCKS_PER_SEC;
     double total_time_multiplication = (((double) end_multiplication) / num_threads) / CLOCKS_PER_SEC;

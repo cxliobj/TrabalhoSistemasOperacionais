@@ -1,10 +1,10 @@
 #include "../include/matrix.h"
 
-void* matrix_transcribe(void* parameters_ref)
+void* matrix_transcribe(void* matrix_ref)
 {
-    Matrix* parameters = (Matrix*) parameters_ref;
-    FILE* fileArray = parameters->fileArray;
-    long long int* array = parameters->array;
+    Matrix* matrix = (Matrix*) matrix_ref;
+    FILE* fileArray = matrix->fileArray;
+    long long int* array = matrix->array;
     long long int finput;
     register unsigned int i = 0;
 
@@ -14,15 +14,15 @@ void* matrix_transcribe(void* parameters_ref)
         i++;
     }
     fclose(fileArray);
-    return parameters;
+    return NULL;
 }
 
-void* matrix_write(void* parameters_ref)
+void* matrix_write(void* matrix_ref)
 {
-    Matrix* parameters = (Matrix*) parameters_ref;
-    FILE* fileArray = parameters->fileArray;
-    long long int* array = parameters->array;
-    register unsigned int dimension = parameters->dimension;
+    Matrix* matrix = (Matrix*) matrix_ref;
+    FILE* fileArray = matrix->fileArray;
+    long long int* array = matrix->array;
+    register unsigned int dimension = matrix->dimension;
     register unsigned int i, j;
 
     for (i = 0; i < dimension; i++)
@@ -34,12 +34,12 @@ void* matrix_write(void* parameters_ref)
         fprintf(fileArray, "\n");
     }
     fclose(fileArray);
-    return parameters;
+    return NULL;
 }
 
 void* matrix_sum(void* parameters_ref)
 {
-    ThreadParameters* parameters = (ThreadParameters*) parameters_ref;
+    Parameters* parameters = (Parameters*) parameters_ref;
     long long int* array1 = parameters->array1;
     long long int* array2 = parameters->array2;
     long long int* array3 = parameters->array3;
@@ -51,12 +51,12 @@ void* matrix_sum(void* parameters_ref)
     {
         array3[i] = array1[i] + array2[i];
     }
-    return parameters;
+    return NULL;
 }
 
 void* matrix_multiplication(void* parameters_ref)
 {
-    ThreadParameters* parameters = (ThreadParameters*) parameters_ref;
+    Parameters* parameters = (Parameters*) parameters_ref;
     long long int* array1 = parameters->array1;
     long long int* array2 = parameters->array2;
     long long int* array3 = parameters->array3;
@@ -73,12 +73,12 @@ void* matrix_multiplication(void* parameters_ref)
             array3[position(row, col, dimension)] += array1[position(row, j, dimension)] * array2[position(j, col, dimension)];
         }
     }
-    return parameters;
+    return NULL;
 }
 
 void* matrix_reduce(void* parameters_ref)
 {
-    ThreadParameters* parameters = (ThreadParameters*) parameters_ref;
+    Parameters* parameters = (Parameters*) parameters_ref;
     long long int* array = parameters->array1;
     long long int sum = 0;
     register unsigned int start = parameters->idx_start;
