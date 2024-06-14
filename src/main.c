@@ -12,10 +12,10 @@ struct timespec start_sum, finish_sum;
 struct timespec start_mult, finish_mult;
 struct timespec start_reduc, finish_reduc;
 
-double global_elapsed;
-double sum_elapsed;
-double mult_elapsed;
-double reduc_elapsed;
+long double global_elapsed;
+long double sum_elapsed;
+long double mult_elapsed;
+long double reduc_elapsed;
 
 int main(int argc, char** argv)
 {
@@ -60,11 +60,11 @@ int main(int argc, char** argv)
 
     global_elapsed = sum_elapsed + mult_elapsed + reduc_elapsed;
 
-    printf("Reducao: %lld.\n", reduction);
-    printf("Tempo soma: %lf segundos.\n", sum_elapsed);
-    printf("Tempo multiplicacao: %lf segundos.\n", mult_elapsed);
-    printf("Tempo reducao: %lf segundos.\n", reduc_elapsed);
-    printf("Tempo total: %lf segundos.\n", global_elapsed);
+    printf("Reducao: %Ld.\n", reduction);
+    printf("Tempo soma: %Lf segundos.\n", sum_elapsed);
+    printf("Tempo multiplicacao: %Lf segundos.\n", mult_elapsed);
+    printf("Tempo reducao: %Lf segundos.\n", reduc_elapsed);
+    printf("Tempo total: %Lf segundos.\n", global_elapsed);
 
     return 0;
 }
