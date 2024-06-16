@@ -5,7 +5,6 @@ OUTDIR = ./out
 BINDIR = ./bin
 TEST_100_DIR = ./teste100
 TEST_1K_DIR = ./teste1k
-TEST_2K_DIR = ./teste2k
 
 CC = gcc
 CVERSION = -std=c11
@@ -16,6 +15,8 @@ CFLAGS = -Wall -Wextra -g -I$(INCDIRS) $(OPT) $(DEPFLAGS) $(CVERSION)
 CFILES = $(foreach D, $(CODEDIRS), $(wildcard $(D)/*.c))
 OBJECTS = $(patsubst $(CODEDIRS)/%.c, $(BINDIR)/%.o, $(CFILES))
 DEPFILES = $(patsubst %.c, %.d, $(CFILES))
+MATFILES = matrixA matrixB matrixC matrixD matrixE
+FEXTENSION = txt
 
 all: bin $(BINDIR)/$(PROGRAM)
 
@@ -32,34 +33,28 @@ out:
 	@mkdir -p out
 
 run-100-1: out
-	@$(BINDIR)/$(PROGRAM) 1 100 $(TEST_100_DIR)/*.txt > $(OUTDIR)/output-100-1.txt
+	@$(BINDIR)/$(PROGRAM) 1 100 $(foreach D, $(MATFILES), $(TEST_100_DIR)/$(D).$(FEXTENSION)) > $(OUTDIR)/output-100-1.txt
 
 run-100-2: out
-	@$(BINDIR)/$(PROGRAM) 2 100 $(TEST_100_DIR)/*.txt > $(OUTDIR)/output-100-2.txt
+	@$(BINDIR)/$(PROGRAM) 2 100 $(foreach D, $(MATFILES), $(TEST_100_DIR)/$(D).$(FEXTENSION)) > $(OUTDIR)/output-100-2.txt
 
 run-100-4: out
-	@$(BINDIR)/$(PROGRAM) 4 100 $(TEST_100_DIR)/*.txt > $(OUTDIR)/output-100-4.txt
+	@$(BINDIR)/$(PROGRAM) 4 100 $(foreach D, $(MATFILES), $(TEST_100_DIR)/$(D).$(FEXTENSION)) > $(OUTDIR)/output-100-4.txt
 
-run-1k-1: out
-	@$(BINDIR)/$(PROGRAM) 1 1000 $(TEST_1K_DIR)/*.txt > $(OUTDIR)/output-1k-1.txt
+run-1000-1: out
+	@$(BINDIR)/$(PROGRAM) 1 1000 $(foreach D, $(MATFILES), $(TEST_1K_DIR)/$(D).$(FEXTENSION)) > $(OUTDIR)/output-1K-1.txt
 
-run-1k-2: out
-	@$(BINDIR)/$(PROGRAM) 2 1000 $(TEST_1K_DIR)/*.txt > $(OUTDIR)/output-1k-2.txt
+run-1000-2: out
+	@$(BINDIR)/$(PROGRAM) 2 1000 $(foreach D, $(MATFILES), $(TEST_1K_DIR)/$(D).$(FEXTENSION)) > $(OUTDIR)/output-1K-2.txt
 
-run-1k-4: out
-	@$(BINDIR)/$(PROGRAM) 4 1000 $(TEST_1K_DIR)/*.txt > $(OUTDIR)/output-1k-4.txt
-
-run-2k-1: out
-	@$(BINDIR)/$(PROGRAM) 1 2000 $(TEST_2K_DIR)/*.txt > $(OUTDIR)/output-2k-1.txt
-
-run-2k-2: out
-	@$(BINDIR)/$(PROGRAM) 2 2000 $(TEST_2K_DIR)/*.txt > $(OUTDIR)/output-2k-2.txt
-
-run-2k-4: out
-	@$(BINDIR)/$(PROGRAM) 4 2000 $(TEST_2K_DIR)/*.txt > $(OUTDIR)/output-2k-4.txt
+run-1000-4: out
+	@$(BINDIR)/$(PROGRAM) 4 1000 $(foreach D, $(MATFILES), $(TEST_1K_DIR)/$(D).$(FEXTENSION)) > $(OUTDIR)/output-1K-4.txt
 
 clean:
-	@rm -rf $(PROGRAM) $(OBJECTS) $(DEPFILES) $(OUTDIR) $(BINDIR)
+	@rm -rf $(PROGRAM) $(OBJECTS) $(DEPFILES) $(OUTDIR) $(BINDIR) $(TEST_100_DIR)/matrixD.$(FEXTENSION) $(TEST_100_DIR)/matrixE.$(FEXTENSION) $(TEST_1K_DIR)/matrixD.$(FEXTENSION) $(TEST_1K_DIR)/matrixE.$(FEXTENSION)
+
+clean-de:
+	@rm -rf $(TEST_100_DIR)/matrixD.$(FEXTENSION) $(TEST_100_DIR)/matrixE.$(FEXTENSION) $(TEST_1K_DIR)/matrixD.$(FEXTENSION) $(TEST_1K_DIR)/matrixE.$(FEXTENSION)
 
 clean-out:
-	@rm -rf $(OUTDIR)/*
+	@rm -rf $(OUTDIR)

@@ -18,25 +18,25 @@ int stringToInt(char* str)
     return ((int) number);
 }
 
-FILE* openFile(char* file_name)
+FILE* openFile(char* file_name, char* file_mode)
 {
-    FILE* file = fopen(file_name, "r+");
+    FILE* file = fopen(file_name, file_mode);
     verify_open_file(file, file_name);
     return file;
 }
 
 long long int* newArray(int dimension)
 {
-    long long int* array = (long long int*) malloc(dimension * dimension * sizeof(long long int));
+    long long int* array = (long long int*) calloc(dimension * dimension, sizeof(long long int));
     verify_allocation_memory(array);
     return array;
 }
 
-Matrix* newMatrix(char* file_name, int dimension)
+Matrix* newMatrix(char* file_name, char* file_mode, int dimension)
 {
     Matrix* matrix = (Matrix*) malloc(sizeof(Matrix));
     verify_allocation_memory(matrix);
-    matrix->fileArray = openFile(file_name);
+    matrix->fileArray = openFile(file_name, file_mode);
     matrix->array = newArray(dimension);
     matrix->dimension = dimension;
     return matrix;

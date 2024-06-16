@@ -28,8 +28,8 @@ typedef struct Parameters
     long long int* array2;
     long long int* array3;
     int dimension;
-    int idx_start;
-    int idx_final;
+    int pos_start;
+    int pos_final;
 } Parameters;
 
 /**
@@ -44,7 +44,7 @@ int stringToInt(char* argv_number);
  * @param file_name Nome do arquivo
  * @return Ponteiro do tipo arquivo (FILE*).
 **/
-FILE* openFile(char* file_name);
+FILE* openFile(char* file_name, char* file_mode);
 
 /**
  * Cria dinamicamente um vetor.
@@ -59,7 +59,7 @@ long long int* newArray(int dimension);
  * @param dimension Tamanho do array associado a estrutura
  * @return Ponteiro do tipo Matrix (Matrix*).
 **/
-Matrix* newMatrix(char* file_name, int dimension);
+Matrix* newMatrix(char* file_name, char* file_mode, int dimension);
 
 /**
  * Cria um vetor dinamicamente comentendo IDs de threads.

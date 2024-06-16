@@ -43,8 +43,8 @@ void* matrix_sum(void* parameters_ref)
     long long int* array1 = parameters->array1;
     long long int* array2 = parameters->array2;
     long long int* array3 = parameters->array3;
-    register unsigned int start = parameters->idx_start;
-    register unsigned int final = parameters->idx_final;
+    register unsigned int start = parameters->pos_start;
+    register unsigned int final = parameters->pos_final;
     register unsigned int i;
 
     for (i = start; i < final; i++)
@@ -61,16 +61,18 @@ void* matrix_multiplication(void* parameters_ref)
     long long int* array2 = parameters->array2;
     long long int* array3 = parameters->array3;
     register unsigned int dimension = parameters->dimension;
-    register unsigned int start = parameters->idx_start;
-    register unsigned int final = parameters->idx_final;
-    register unsigned int i, j;
-    
-    for (i = start; i < final; ++i) {
-        register unsigned int row = i % dimension;
-        register unsigned int col = i / dimension;
+    register unsigned int start = parameters->pos_start;
+    register unsigned int final = parameters->pos_final;
+    register unsigned int i, j, k;
 
-        for (j = 0; j < dimension; ++j) {
-            array3[position(row, col, dimension)] += array1[position(row, j, dimension)] * array2[position(j, col, dimension)];
+    for(i = start; i < final; i++)
+    {
+        for(k = 0; k < dimension; k++)
+        {
+            for(j = 0; j < dimension; j++)
+            {
+                array3[position(i, j, dimension)] += array1[position(i, k, dimension)] * array2[position(k, j, dimension)];
+            }
         }
     }
     return NULL;
@@ -81,8 +83,8 @@ void* matrix_reduce(void* parameters_ref)
     Parameters* parameters = (Parameters*) parameters_ref;
     long long int* array = parameters->array1;
     long long int sum = 0;
-    register unsigned int start = parameters->idx_start;
-    register unsigned int final = parameters->idx_final;
+    register unsigned int start = parameters->pos_start;
+    register unsigned int final = parameters->pos_final;
     register unsigned int i;
 
     for (i = start; i < final; i++)
