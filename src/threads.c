@@ -37,7 +37,7 @@ void transcribe_A_and_B(Matrix* matrix_A, Matrix* matrix_B, int num_threads)
 void sum(Matrix* matrix_A, Matrix* matrix_B, Matrix* matrix_D, int dimension, int num_threads)
 {
     Parameters* parameters = newParameters(num_threads);
-    register unsigned int num_elements = (dimension * dimension) / num_threads;
+    register int num_elements = (dimension * dimension) / num_threads;
     register int i;
 
     for (i = 0; i < num_threads; i++)
@@ -68,7 +68,7 @@ void sum(Matrix* matrix_A, Matrix* matrix_B, Matrix* matrix_D, int dimension, in
         }
 
         // Aguardando a finalizacao das threads de soma
-        for (int i = 0; i < num_threads; i++)
+        for (i = 0; i < num_threads; i++)
         {
             err = pthread_join(thread_ids[i], NULL);
             verify_thread_join(err);
@@ -117,7 +117,7 @@ void write_D_transcribe_C(Matrix* matrix_C, Matrix* matrix_D, int num_threads)
 void multiply(Matrix* matrix_C, Matrix* matrix_D, Matrix* matrix_E, int dimension, int num_threads)
 {
     Parameters* parameters = newParameters(num_threads);
-    register unsigned int num_lines = dimension / num_threads;
+    register int num_lines = dimension / num_threads;
     register int i;
 
     for (i = 0; i < num_threads; i++)
@@ -164,7 +164,7 @@ void multiply(Matrix* matrix_C, Matrix* matrix_D, Matrix* matrix_E, int dimensio
 long long int reduce(Matrix* matrix_E, int dimension, int num_threads)
 {
     Parameters* parameters = newParameters(num_threads+1);
-    register unsigned int num_elements = (dimension * dimension) / num_threads;
+    register int num_elements = (dimension * dimension) / num_threads;
     register int i;
     long long int sum = 0;
 
@@ -205,7 +205,7 @@ long long int reduce(Matrix* matrix_E, int dimension, int num_threads)
         verify_thread_join(err);
 
         // Esperando as threads de redução
-        for (int i = 0; i < num_threads; i++)
+        for (i = 0; i < num_threads; i++)
         {
             err = pthread_join(thread_ids[i], (void**) &partialSum);
             verify_thread_join(err);

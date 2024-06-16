@@ -5,12 +5,9 @@
 */
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
 #include <time.h>
 #include "../include/errorMessages.h"
 #include "../include/resources.h"
-#include "../include/matrix.h"
 #include "../include/threads.h"
 
 #define file_matrix_A argv[3]
