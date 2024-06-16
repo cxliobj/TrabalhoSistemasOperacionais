@@ -27,7 +27,6 @@ FILE* openFile(char* file_name)
 
 long long int* newArray(int dimension)
 {
-    verify_allocation_memory_size(dimension);
     long long int* array = (long long int*) malloc(dimension * dimension * sizeof(long long int));
     verify_allocation_memory(array);
     return array;
@@ -35,7 +34,6 @@ long long int* newArray(int dimension)
 
 Matrix* newMatrix(char* file_name, int dimension)
 {
-    verify_allocation_memory_size(dimension);
     Matrix* matrix = (Matrix*) malloc(sizeof(Matrix));
     verify_allocation_memory(matrix);
     matrix->fileArray = openFile(file_name);
@@ -46,7 +44,6 @@ Matrix* newMatrix(char* file_name, int dimension)
 
 pthread_t* newThreadIDs(int num_threads)
 {
-    verify_allocation_memory_size(num_threads);
     pthread_t *threadIDs = (pthread_t*) malloc(num_threads * sizeof(pthread_t));
     verify_allocation_memory(threadIDs);
     return threadIDs;
@@ -54,7 +51,6 @@ pthread_t* newThreadIDs(int num_threads)
 
 Parameters* newParameters(int num_threads)
 {
-    verify_allocation_memory_size(num_threads);
     Parameters* parameters = (Parameters*) malloc(num_threads * sizeof(Parameters));
     verify_allocation_memory(parameters);
     return parameters;

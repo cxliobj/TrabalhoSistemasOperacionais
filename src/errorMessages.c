@@ -18,15 +18,6 @@ void verify_thread_join(int err)
     }
 }
 
-void verify_allocation_memory_size(int obj)
-{
-    if (obj <= 0)
-    {
-        fprintf(stderr, "Incompatible size to allocate memory.\n");
-        exit(EXIT_FAILURE);
-    }
-}
-
 void verify_allocation_memory(void* obj)
 {
     if (obj == NULL)
@@ -67,7 +58,7 @@ void verify_num_dimension(int dimension)
 {
     if (dimension <= 0)
     {
-        fprintf(stderr, "Invalid dimension number.\n");
+        fprintf(stderr, "Invalid matrix dimension.\n");
         exit(EXIT_FAILURE); 
     }
 }

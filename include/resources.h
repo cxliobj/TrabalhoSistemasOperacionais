@@ -7,6 +7,9 @@
 #include <errno.h>
 #include "../include/errorMessages.h"
 
+/**
+ * A estrutura Matrix guarda os dados básicos iniciais que cada matriz deve ter: arquivo, vetor e ordem.
+**/
 typedef struct Matrix
 {
     FILE* fileArray;
@@ -14,6 +17,11 @@ typedef struct Matrix
     int dimension;
 } Matrix;
 
+/**
+ * A estrutura Parameters possui os parâmetros necessários para uma execução multi-thread das
+ * funções soma, multiplicação e redução.
+ * Estes dados serão os argumentos repassado ao pthread_create.
+**/
 typedef struct Parameters
 {
     long long int* array1;
@@ -26,41 +34,37 @@ typedef struct Parameters
 
 /**
  * Converte uma string em um número inteiro.
- * @param argv_number Número em formato char* obtido da matriz argv.
+ * @param argv_number Número em formato char* obtido do ponteiro argv
  * @return Número inteiro convertido para int.
 **/
 int stringToInt(char* argv_number);
 
 /**
  * Abre um arquivo no modo leitura e escrita (r+).
- * @param file_name Nome do arquivo.
+ * @param file_name Nome do arquivo
  * @return Ponteiro do tipo arquivo (FILE*).
- * @throw Retorna 2 se o arquivo não puder ser aberto, junto com uma mensagem de erro.
 **/
 FILE* openFile(char* file_name);
 
 /**
  * Cria dinamicamente um vetor.
- * @param dimension Tamanho da matriz.
+ * @param dimension Ordem da matriz
  * @return Ponteiro do tipo long long int.
- * @throw Retorna 2 se a alocação falhar, junto com uma mensagem de erro.
 **/
 long long int* newArray(int dimension);
 
 /**
  * Cria dinamicamente uma estrutura do tipo Matrix*.
- * @param file_name Nome do arquivo associado a estrutura.
- * @param dimension Tamanho do array associado a estrutura.
+ * @param file_name Nome do arquivo associado a estrutura
+ * @param dimension Tamanho do array associado a estrutura
  * @return Ponteiro do tipo Matrix (Matrix*).
- * @throw Retorna 2 se a alocação falhar, junto com uma mensagem de erro.
 **/
 Matrix* newMatrix(char* file_name, int dimension);
 
 /**
  * Cria um vetor dinamicamente comentendo IDs de threads.
  * @param num_threads Tamanho do vetor
- * @return Vetor contendo os IDs.
- * @throw Retorna 2 se a alocação falhar, junto com uma mensagem de erro.
+ * @return Ponteiro do tipo.
 **/
 pthread_t* newThreadIDs(int num_threads);
 
@@ -68,8 +72,7 @@ pthread_t* newThreadIDs(int num_threads);
  * Cria dinamicamente uma estrutura do tipo Parameters*.
  * @param file_name Nome do arquivo associado a matriz
  * @param dimension Tamanho do vetor de parâmetros
- * @return Ponteiro do tipo Parameters
- * @throw Retorna 2 se a alocação falhar, junto com uma mensagem de erro.
+ * @return Ponteiro do tipo Parameters (Parameters*).
 **/
 Parameters* newParameters(int num_threads);
 

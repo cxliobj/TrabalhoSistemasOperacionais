@@ -11,7 +11,7 @@ CC = gcc
 CVERSION = -std=c11
 OPT = -O3
 DEPFLAGS = -MP -MD
-CFLAGS = -Wall -Wextra -g -I$(INCDIRS) $(OPT) $(DEPFLAGS) $(CVERSION) -D_POSIX_C_SOURCE=199309L
+CFLAGS = -Wall -Wextra -g -I$(INCDIRS) $(OPT) $(DEPFLAGS) $(CVERSION)
 
 CFILES = $(foreach D, $(CODEDIRS), $(wildcard $(D)/*.c))
 OBJECTS = $(patsubst $(CODEDIRS)/%.c, $(BINDIR)/%.o, $(CFILES))

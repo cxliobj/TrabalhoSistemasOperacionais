@@ -1,3 +1,10 @@
+/**
+ * Nome do grupo: Vasco da Gama
+ * Integrante 1: Celio Benhami Junior (246625) 
+ * Integrante 2: Gabriel Gato Piragini Santana (169025)
+*/
+
+#define _POSIX_C_SOURCE 199309L
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -6,16 +13,10 @@
 #include "../include/resources.h"
 #include "../include/matrix.h"
 #include "../include/threads.h"
-#define _POSIX_C_SOURCE 199309L
 
 struct timespec start_sum, finish_sum;
 struct timespec start_mult, finish_mult;
 struct timespec start_reduc, finish_reduc;
-
-long double global_elapsed;
-long double sum_elapsed;
-long double mult_elapsed;
-long double reduc_elapsed;
 
 int main(int argc, char** argv)
 {
@@ -48,17 +49,17 @@ int main(int argc, char** argv)
     clock_gettime(CLOCK_MONOTONIC, &start_reduc);
     long long int reduction = reduce(matrix, dimension, num_threads);
     clock_gettime(CLOCK_MONOTONIC, &finish_reduc);
-    
-    sum_elapsed = (finish_sum.tv_sec - start_sum.tv_sec);
+
+    long double sum_elapsed = (finish_sum.tv_sec - start_sum.tv_sec);
     sum_elapsed += (finish_sum.tv_nsec - start_sum.tv_nsec) / 1000000000.0;
 
-    mult_elapsed = (finish_mult.tv_sec - start_mult.tv_sec);
+    long double mult_elapsed = (finish_mult.tv_sec - start_mult.tv_sec);
     mult_elapsed += (finish_mult.tv_nsec - start_mult.tv_nsec) / 1000000000.0;
 
-    reduc_elapsed = (finish_reduc.tv_sec - start_reduc.tv_sec);
+    long double reduc_elapsed = (finish_reduc.tv_sec - start_reduc.tv_sec);
     reduc_elapsed += (finish_reduc.tv_nsec - start_reduc.tv_nsec) / 1000000000.0;
 
-    global_elapsed = sum_elapsed + mult_elapsed + reduc_elapsed;
+    long double global_elapsed = sum_elapsed + mult_elapsed + reduc_elapsed;
 
     printf("Reducao: %Ld.\n", reduction);
     printf("Tempo soma: %Lf segundos.\n", sum_elapsed);
