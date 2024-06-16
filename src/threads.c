@@ -1,10 +1,7 @@
 #include "../include/threads.h"
 
-void transcribe_A_and_B(Matrix** matrix, int num_threads)
+void transcribe_A_and_B(Matrix* matrix_A, Matrix* matrix_B, int num_threads)
 {
-    Matrix* matrix_A = matrix[0];
-    Matrix* matrix_B = matrix[1];
-
     if (num_threads == 1)
     {   
         // Leitura da matriz A
@@ -19,12 +16,13 @@ void transcribe_A_and_B(Matrix** matrix, int num_threads)
         register int i;
         int err;
 
-        // Inicio das threads de leitura das matrizes A e B
-        for (i = 0; i < 2; i++)
-        {
-            err = pthread_create(&thread_ids[i], NULL, matrix_transcribe, (void*) matrix[i]);
-            verify_thread_create(err);
-        }
+        // Leitura da matriz A
+        err = pthread_create(&thread_ids[0], NULL, matrix_transcribe, (void*) matrix_A);
+        verify_thread_create(err);
+
+        // Leitura da matriz B
+        err = pthread_create(&thread_ids[1], NULL, matrix_transcribe, (void*) matrix_B);
+        verify_thread_create(err);
 
         // Aguardando a finalizacao das threads de leitura das matrizes A e B
         for (i = 0; i < 2; i++)
@@ -36,12 +34,8 @@ void transcribe_A_and_B(Matrix** matrix, int num_threads)
     } 
 }
 
-void sum(Matrix** matrix, int dimension, int num_threads)
+void sum(Matrix* matrix_A, Matrix* matrix_B, Matrix* matrix_D, int dimension, int num_threads)
 {
-    Matrix* matrix_A = matrix[0];
-    Matrix* matrix_B = matrix[1];
-    Matrix* matrix_D = matrix[3];
-
     Parameters* parameters = newParameters(num_threads);
     register unsigned int num_elements = (dimension * dimension) / num_threads;
     register int i;
@@ -86,11 +80,8 @@ void sum(Matrix** matrix, int dimension, int num_threads)
     free(matrix_B);
 }
 
-void write_D_transcribe_C(Matrix** matrix, int num_threads)
-{
-    Matrix* matrix_C = matrix[2];
-    Matrix* matrix_D = matrix[3];
-    
+void write_D_transcribe_C(Matrix* matrix_C, Matrix* matrix_D, int num_threads)
+{ 
     if (num_threads == 1)
     {   
         // Gravacao da matriz D
@@ -123,12 +114,8 @@ void write_D_transcribe_C(Matrix** matrix, int num_threads)
     }
 }
 
-void multiply(Matrix** matrix, int dimension, int num_threads)
+void multiply(Matrix* matrix_C, Matrix* matrix_D, Matrix* matrix_E, int dimension, int num_threads)
 {
-    Matrix* matrix_C = matrix[2];
-    Matrix* matrix_D = matrix[3];
-    Matrix* matrix_E = matrix[4];
-
     Parameters* parameters = newParameters(num_threads);
     register unsigned int num_elements = (dimension * dimension) / num_threads;
     register int i;
@@ -174,10 +161,8 @@ void multiply(Matrix** matrix, int dimension, int num_threads)
     free(matrix_D);
 }
 
-long long int reduce(Matrix** matrix, int dimension, int num_threads)
+long long int reduce(Matrix* matrix_E, int dimension, int num_threads)
 {
-    Matrix* matrix_E = matrix[4];
-
     Parameters* parameters = newParameters(num_threads+1);
     register unsigned int num_elements = (dimension * dimension) / num_threads;
     register int i;

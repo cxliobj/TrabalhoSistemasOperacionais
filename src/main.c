@@ -14,6 +14,12 @@
 #include "../include/matrix.h"
 #include "../include/threads.h"
 
+#define file_matrix_A argv[3]
+#define file_matrix_B argv[4]
+#define file_matrix_C argv[5]
+#define file_matrix_D argv[6]
+#define file_matrix_E argv[7]
+
 struct timespec start_sum, finish_sum;
 struct timespec start_mult, finish_mult;
 struct timespec start_reduc, finish_reduc;
@@ -28,26 +34,26 @@ int main(int argc, char** argv)
     int dimension = stringToInt(argv[2]);
     verify_num_dimension(dimension);
 
-    Matrix** matrix = (Matrix**) malloc(5 * sizeof(Matrix*));
-    for (int i = 0; i < 5; i++)
-    {
-        matrix[i] = newMatrix(argv[i+3], dimension);
-    }
+    Matrix* matrix_A = newMatrix(file_matrix_A, dimension);
+    Matrix* matrix_B = newMatrix(file_matrix_B, dimension);
+    Matrix* matrix_C = newMatrix(file_matrix_C, dimension);
+    Matrix* matrix_D = newMatrix(file_matrix_D, dimension);
+    Matrix* matrix_E = newMatrix(file_matrix_E, dimension);
 
-    transcribe_A_and_B(matrix, num_threads);
+    transcribe_A_and_B(matrix_A, matrix_B, num_threads);
 
     clock_gettime(CLOCK_MONOTONIC, &start_sum);
-    sum(matrix, dimension, num_threads);
+    sum(matrix_A, matrix_B, matrix_D, dimension, num_threads);
     clock_gettime(CLOCK_MONOTONIC, &finish_sum);
 
-    write_D_transcribe_C(matrix, num_threads);
+    write_D_transcribe_C(matrix_C, matrix_D, num_threads);
 
     clock_gettime(CLOCK_MONOTONIC, &start_mult);
-    multiply(matrix, dimension, num_threads);
+    multiply(matrix_C, matrix_D, matrix_E, dimension, num_threads);
     clock_gettime(CLOCK_MONOTONIC, &finish_mult);
 
     clock_gettime(CLOCK_MONOTONIC, &start_reduc);
-    long long int reduction = reduce(matrix, dimension, num_threads);
+    long long int reduction = reduce(matrix_E, dimension, num_threads);
     clock_gettime(CLOCK_MONOTONIC, &finish_reduc);
 
     long double sum_elapsed = (finish_sum.tv_sec - start_sum.tv_sec);
