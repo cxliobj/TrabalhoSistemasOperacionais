@@ -15,8 +15,8 @@ CFLAGS = -Wall -Wextra -g -I$(INCDIRS) $(OPT) $(DEPFLAGS) $(CVERSION)
 CFILES = $(foreach D, $(CODEDIRS), $(wildcard $(D)/*.c))
 OBJECTS = $(patsubst $(CODEDIRS)/%.c, $(BINDIR)/%.o, $(CFILES))
 DEPFILES = $(patsubst %.c, %.d, $(CFILES))
-MATFILES = matrixA matrixB matrixC matrixD matrixE
-FEXTENSION = txt
+MATFILES = arqA arqB arqC arqD arqE
+FEXTENSION = dat
 
 all: bin $(BINDIR)/$(PROGRAM)
 

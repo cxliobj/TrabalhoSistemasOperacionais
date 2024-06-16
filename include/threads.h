@@ -41,7 +41,7 @@ void sum(Matrix* matrix_A, Matrix* matrix_B, Matrix* matrix_D, int dimension, in
 void write_D_transcribe_C(Matrix* matrix_C, Matrix* matrix_D, int num_threads);
 
 /**
- * Função para fazer a gravação da matriz D e redução da matriz E.
+ * Função para fazer a multiplicação entre C e D.
  * @param matrix_C Ponteiro que armazena as infromações da matriz C
  * @param matrix_D Ponteiro que armazena as infromações da matriz D
  * @param matrix_E Ponteiro que armazena as infromações da matriz E

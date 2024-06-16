@@ -122,8 +122,8 @@ void multiply(Matrix* matrix_C, Matrix* matrix_D, Matrix* matrix_E, int dimensio
 
     for (i = 0; i < num_threads; i++)
     {
-        parameters[i].array1 = matrix_D->array;
-        parameters[i].array2 = matrix_C->array;
+        parameters[i].array1 = matrix_C->array;
+        parameters[i].array2 = matrix_D->array;
         parameters[i].array3 = matrix_E->array;
         parameters[i].dimension = dimension;
         parameters[i].start_pos = num_lines * i;
