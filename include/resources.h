@@ -28,14 +28,15 @@ typedef struct Parameters
     long long int* array2;
     long long int* array3;
     int dimension;
-    int pos_start;
-    int pos_final;
+    int start_pos;
+    int final_pos;
 } Parameters;
 
 /**
  * Converte uma string em um número inteiro.
  * @param argv_number Número em formato char* obtido do ponteiro argv
  * @return Número inteiro convertido para int.
+ * @throw Retorna 1 se a conversão da string falhou, junto com uma mensagem de erro.
 **/
 int stringToInt(char* argv_number);
 

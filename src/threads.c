@@ -45,8 +45,8 @@ void sum(Matrix* matrix_A, Matrix* matrix_B, Matrix* matrix_D, int dimension, in
         parameters[i].array1 = matrix_A->array;
         parameters[i].array2 = matrix_B->array;
         parameters[i].array3 = matrix_D->array;
-        parameters[i].pos_start = num_elements * i;
-        parameters[i].pos_final = (num_elements * (i+1));
+        parameters[i].start_pos = num_elements * i;
+        parameters[i].final_pos = (num_elements * (i+1));
     }
 
     if (num_threads == 1)
@@ -126,8 +126,8 @@ void multiply(Matrix* matrix_C, Matrix* matrix_D, Matrix* matrix_E, int dimensio
         parameters[i].array2 = matrix_C->array;
         parameters[i].array3 = matrix_E->array;
         parameters[i].dimension = dimension;
-        parameters[i].pos_start = num_lines * i;
-        parameters[i].pos_final = (num_lines * (i+1));
+        parameters[i].start_pos = num_lines * i;
+        parameters[i].final_pos = (num_lines * (i+1));
     }
 
     if (num_threads == 1)
@@ -171,8 +171,8 @@ long long int reduce(Matrix* matrix_E, int dimension, int num_threads)
     for (i = 0; i < num_threads; i++)
     {
         parameters[i].array1 = matrix_E->array;
-        parameters[i].pos_start = num_elements * i;
-        parameters[i].pos_final = (num_elements * (i+1));
+        parameters[i].start_pos = num_elements * i;
+        parameters[i].final_pos = (num_elements * (i+1));
     }
 
     if (num_threads == 1)
