@@ -20,7 +20,7 @@ O projeto consiste em:
 1. Leitura da Matriz A // Leitura da Matriz B ***(2 threads Tl)***
 2. Soma das Matrizes A + B = D ***(T threads Tp)***
 3. Gravação da Matriz D // Leitura da Matriz C ***(1 thread Te + 1 thread Tl)***
-4. Multiplição das Matrizes D x C = E ***(T threads Tp)***
+4. Multiplicação das Matrizes D x C = E ***(T threads Tp)***
 5. Gravação da Matriz E // Redução da Matriz E ***(1 thread Te + T threads Tp)***
 
 ## Requisitos

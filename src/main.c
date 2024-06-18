@@ -26,7 +26,7 @@ int main(int argc, char** argv)
     int dimension = stringToInt(argv[2]);
     verify_num_dimension(dimension);
 
-    Matrix* matrix_A = newMatrix(file_matrix_A, "r+",dimension);
+    Matrix* matrix_A = newMatrix(file_matrix_A, "r+", dimension);
     Matrix* matrix_B = newMatrix(file_matrix_B, "r+", dimension);
     Matrix* matrix_C = newMatrix(file_matrix_C, "r+", dimension);
     Matrix* matrix_D = newMatrix(file_matrix_D, "w+", dimension);
