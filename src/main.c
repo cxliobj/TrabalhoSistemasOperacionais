@@ -4,6 +4,7 @@
  * Integrante 2: Gabriel Gato Piragini Santana (169025)
 */
 
+#define _POSIX_C_SOURCE 199309L
 #include <stdio.h>
 #include <time.h>
 #include "../include/errorMessages.h"
@@ -15,6 +16,10 @@
 #define file_matrix_C argv[5]
 #define file_matrix_D argv[6]
 #define file_matrix_E argv[7]
+
+struct timespec start_sum, finish_sum;
+struct timespec start_mult, finish_mult;
+struct timespec start_reduc, finish_reduc;
 
 int main(int argc, char** argv)
 {
@@ -31,33 +36,39 @@ int main(int argc, char** argv)
     Matrix* matrix_C = newMatrix(file_matrix_C, "r+", dimension);
     Matrix* matrix_D = newMatrix(file_matrix_D, "w+", dimension);
     Matrix* matrix_E = newMatrix(file_matrix_E, "w+", dimension);
-
+    
     transcribe_A_and_B(matrix_A, matrix_B, num_threads);
-
-    clock_t start_sum = clock();
+    
+    clock_gettime(CLOCK_MONOTONIC, &start_sum);
     sum(matrix_A, matrix_B, matrix_D, dimension, num_threads);
-    clock_t end_sum = clock() - start_sum;
-
+    clock_gettime(CLOCK_MONOTONIC, &finish_sum);
+    
     write_D_transcribe_C(matrix_C, matrix_D, num_threads);
 
-    clock_t start_multiplication = clock();
+    clock_gettime(CLOCK_MONOTONIC, &start_mult);
     multiply(matrix_C, matrix_D, matrix_E, dimension, num_threads);
-    clock_t end_multiplication = clock() - start_multiplication;
+    clock_gettime(CLOCK_MONOTONIC, &finish_mult);
 
-    clock_t start_reduction = clock();
+    clock_gettime(CLOCK_MONOTONIC, &start_reduc);
     long long int reduction = reduce(matrix_E, dimension, num_threads);
-    clock_t end_reduction = clock() - start_reduction;
+    clock_gettime(CLOCK_MONOTONIC, &finish_reduc);
 
-    double total_time_sum = ((double) end_sum) / CLOCKS_PER_SEC;
-    double total_time_multiplication = ((double) end_multiplication)/ CLOCKS_PER_SEC;
-    double total_time_reduction = ((double) end_reduction) / CLOCKS_PER_SEC;
-    double total_time_global = total_time_sum + total_time_multiplication + total_time_reduction;
+    double sum_elapsed = (finish_sum.tv_sec - start_sum.tv_sec);
+    sum_elapsed += (finish_sum.tv_nsec - start_sum.tv_nsec) / 1000000000.0;
+
+    double mult_elapsed = (finish_mult.tv_sec - start_mult.tv_sec);
+    mult_elapsed += (finish_mult.tv_nsec - start_mult.tv_nsec) / 1000000000.0;
+
+    double reduc_elapsed = (finish_reduc.tv_sec - start_reduc.tv_sec);
+    reduc_elapsed += (finish_reduc.tv_nsec - start_reduc.tv_nsec) / 1000000000.0;
+
+    double global_elapsed = sum_elapsed + mult_elapsed + reduc_elapsed;
 
     printf("Reducao: %lld.\n", reduction);
-    printf("Tempo soma: %lf segundos.\n", total_time_sum);
-    printf("Tempo multiplicacao: %lf segundos.\n", total_time_multiplication);
-    printf("Tempo reducao: %lf segundos.\n", total_time_reduction);
-    printf("Tempo total: %lf segundos.\n", total_time_global);
+    printf("Tempo soma: %lf segundos.\n", sum_elapsed);
+    printf("Tempo multiplicacao: %lf segundos.\n", mult_elapsed);
+    printf("Tempo reducao: %lf segundos.\n", reduc_elapsed);
+    printf("Tempo total: %lf segundos.\n", global_elapsed);
 
     return 0;
 }

@@ -1,0 +1,5 @@
+Reducao: 2000000000.
+Tempo soma: 0.004334 segundos.
+Tempo multiplicacao: 0.976656 segundos.
+Tempo reducao: 0.083958 segundos.
+Tempo total: 1.064949 segundos.
